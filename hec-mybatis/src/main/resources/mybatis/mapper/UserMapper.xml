@@ -11,9 +11,12 @@
     <result property="isDeleted" column="is_deleted"/>
   </resultMap>
 
-  <select id="getUserById" resultMap="UserResultMap">
-    SELECT * FROM users WHERE user_id = #{userId}
-  </select>
+
+  <!-- 사용자 생성 메소드 -->
+  <insert id="createUser" parameterType="com.example.heccore.user.model.UserVO">
+    INSERT INTO users (name, created_at, updated_at)
+    VALUES (#{name}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+  </insert>
 
   <!-- 사용자 이름(name) 수정하는 쿼리 -->
   <update id="updateUserName" parameterType="com.example.heccore.user.model.UserVO">
@@ -23,5 +26,39 @@
     WHERE user_id = #{userId}
   </update>
 
+
+  <!-- 소프트 딜리트 메소드 -->
+  <update id="softDeleteUser" parameterType="com.example.heccore.user.model.UserVO">
+    UPDATE users
+    SET is_deleted = true,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE user_id = #{userId}
+  </update>
+
+<!--  사용자 단건 조회 -->
+  <select id="getUserById" resultMap="UserResultMap">
+    SELECT * FROM users WHERE user_id = #{userId}
+  </select>
+
+  <!-- 다양한 옵션을 고려한 사용자 조회 -->
+  <select id="getUsersWithOptions" resultMap="UserResultMap" parameterType="com.example.hecmybatis.user.dto.request.UserConditionDto">
+    SELECT * FROM users
+    <where>
+      <if test="name != null and name != ''">
+        AND name LIKE CONCAT('%', #{name}, '%')
+      </if>    </where>
+    <choose>
+      <when test="orderBy != null and orderBy.equals('name')">
+        ORDER BY name
+      </when>
+      <when test="orderBy != null and orderBy.equals('createdAt')">
+        ORDER BY created_at
+      </when>
+      <otherwise>
+        ORDER BY user_id
+      </otherwise>
+    </choose>
+    LIMIT #{offset}, #{size}
+  </select>
 
 </mapper>
