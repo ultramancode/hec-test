@@ -1,4 +1,4 @@
-package com.example.heccore.model;
+package com.example.heccore.common.model;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
