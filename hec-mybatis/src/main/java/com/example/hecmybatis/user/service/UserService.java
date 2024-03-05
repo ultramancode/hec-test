@@ -18,6 +18,11 @@ public class UserService {
         List<UserVO> userVOS = userMapper.selectAllUsers();
 
         return userVOS.stream().map(userVO ->
-                    new UserResponseDto(userVO.getId(), userVO.getName())).collect(Collectors.toList());
+                    new UserResponseDto(userVO.getUserId(), userVO.getName())).collect(Collectors.toList());
+    }
+
+
+    public UserVO getUserVOById(Long userId) {
+        return userMapper.getUserById(userId);
     }
 }

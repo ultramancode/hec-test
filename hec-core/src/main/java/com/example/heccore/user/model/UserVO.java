@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserVO extends BaseVO {
 
-    String id;
+    Long userId;
     String name;
     boolean isDeleted = false;
 
-    public UserVO(String id, String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public UserVO(Long userId, String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
         super(createdAt, updatedAt);
-        this.id = id;
+        this.userId = userId;
         this.name = name;
     }
 

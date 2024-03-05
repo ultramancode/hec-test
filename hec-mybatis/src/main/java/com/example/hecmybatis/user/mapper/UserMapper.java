@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface UserMapper {
-    UserVO getUserById(String id);
+    UserVO getUserById(Long userId);
 
     @Select("SELECT * FROM users")
     List<UserVO> selectAllUsers();
