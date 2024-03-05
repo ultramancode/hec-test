@@ -13,9 +13,7 @@ public class UserVO extends BaseVO {
     String name;
     boolean isDeleted = false;
 
-    public UserVO(Long userId, String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        super(createdAt, updatedAt);
-        this.userId = userId;
+    public UserVO(String name) {
         this.name = name;
     }
 
