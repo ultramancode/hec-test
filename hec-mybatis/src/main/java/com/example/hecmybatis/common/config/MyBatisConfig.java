@@ -1,4 +1,4 @@
-package com.example.hecmybatis.config;
+package com.example.hecmybatis.common.config;
 
 import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@MapperScan("com.example.hecmybatis.mapper")
+@MapperScan("com.example.hecmybatis")
 public class MyBatisConfig {
 
     @Bean
