@@ -11,4 +11,7 @@ public interface UserMapper {
 
     @Select("SELECT * FROM users")
     List<UserVO> selectAllUsers();
+
+    void updateUserName(UserVO user);
+
 }

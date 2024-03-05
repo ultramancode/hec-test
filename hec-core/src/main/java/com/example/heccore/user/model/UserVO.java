@@ -22,4 +22,8 @@ public class UserVO extends BaseVO {
     public void softDelete() {
         this.isDeleted = true;
     }
+    public void updateUserName(String name){
+        this.name = name;
+    }
+
 }
