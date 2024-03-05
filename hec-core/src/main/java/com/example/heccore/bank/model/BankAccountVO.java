@@ -2,8 +2,10 @@ package com.example.heccore.bank.model;
 
 import com.example.heccore.common.enums.Bank;
 import com.example.heccore.common.model.BaseVO;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,9 +20,8 @@ public class BankAccountVO extends BaseVO {
     private BigDecimal balance;
     private boolean isDeleted = false;
 
-    public BankAccountVO(LocalDateTime createdAt, LocalDateTime updatedAt,
+    public BankAccountVO(
             Long accountId, Long userId, Bank bank, Long accountNumber, BigDecimal balance) {
-        super(createdAt, updatedAt);
         this.accountId = accountId;
         this.userId = userId;
         this.bank = bank;

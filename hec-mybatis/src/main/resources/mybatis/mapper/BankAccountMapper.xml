@@ -15,7 +15,7 @@
   </resultMap>
 
   <!-- 사용자 정보와 함께 계좌 정보를 가져오는 resultMap -->
-  <resultMap id="BankAccountWithUserResultMap" type="com.example.heccore.bank.model.BankAccountWithUserVO">
+  <resultMap id="BankAccountWithUserNameResultMap" type="com.example.heccore.bank.model.BankAccountWithUserNameVO">
     <id property="accountId" column="account_id"/>
     <result property="userId" column="user_id"/>
     <result property="bank" column="bank" javaType="com.example.heccore.common.enums.Bank" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
@@ -28,11 +28,89 @@
     <result property="name" column="name"/>
   </resultMap>
 
-  <!-- 사용자 정보를 포함한 계좌 정보를 가져오는 쿼리 -->
-  <select id="getBankAccountsWithUser" resultMap="BankAccountWithUserResultMap">
-    SELECT ba.*, u.name as name
-    FROM bank_account ba
-           LEFT JOIN users u ON ba.user_id = u.user_id
+
+
+  <!-- 계좌 생성 -->
+  <insert id="createBankAccount" parameterType="com.example.heccore.bank.model.BankAccountVO">
+    INSERT INTO bank_accounts (user_id, bank, account_number, balance, created_at, updated_at)
+    VALUES (#{userId}, #{bank}, #{accountNumber}, #{balance}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+  </insert>
+
+  <!-- 잔액 업데이트 -->
+  <update id="updateBalance" parameterType="com.example.heccore.bank.model.BankAccountVO">
+    UPDATE bank_accounts
+    SET balance = #{balance}, updated_at = #{updatedAt}
+    WHERE account_id = #{accountId}
+  </update>
+
+  <!-- 소프트 딜리트 메소드 -->
+  <update id="softDeleteBankAccount" parameterType="com.example.heccore.bank.model.BankAccountVO">
+    UPDATE bank_accounts
+    SET is_deleted = #{isDeleted}, updated_at = #{updatedAt}
+    WHERE account_id = #{accountId}
+  </update>
+
+  <!-- 단일 계좌 조회 -->
+  <select id="getBankAccountById" resultMap="BankAccountResultMap">
+    SELECT *
+    FROM bank_accounts
+    WHERE account_id = #{accountId}
   </select>
 
+  <!-- 특정 사용자의 모든 계좌 조회  -->
+  <select id="getBankAccountsByUserId" resultMap="BankAccountWithUserResultMap">
+    SELECT ba.*, u.name as name
+    FROM bank_accounts ba
+    LEFT JOIN users u ON ba.user_id = u.user_id
+    WHERE
+    <if test="userId != null">
+      ba.user_id = #{userId}
+    </if>
+  </select>
+
+
+  <!-- 사용자 이름을 포함한 계좌 정보를 가져오는 쿼리 (다양한 옵션 고려)-->
+  <select id="getBankAccountsWithUserNameAndOptions" resultMap="BankAccountWithUserNameResultMap" parameterType="com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto">
+    SELECT ba.*, u.name as name
+    FROM bank_accounts ba
+    LEFT JOIN users u ON ba.user_id = u.user_id
+    <where>
+    <if test="userId != null">뭉
+      AND ba.user_id = #{userId}
+    </if>
+    <if test="accountNumber != null">
+      AND ba.account_number = #{accountNumber}
+    </if>
+    <if test="bank != null">
+      AND ba.bank = #{bank}
+    </if>
+    <if test="name != null">
+      AND u.name LIKE CONCAT('%', #{name}, '%')
+    </if>
+    <if test="minBalance != null">
+      AND ba.balance <![CDATA[ >= ]]> #{minBalance}
+    </if>
+    <if test="maxBalance != null">
+      AND ba.balance <![CDATA[ <= ]]> #{maxBalance}
+    </if>
+    </where>
+    <choose>
+      <when test="orderBy == 'bank'">
+        ba.bank
+      </when>
+      <when test="orderBy == 'balance'">
+        ORDER BY ba.balance
+      </when>
+      <when test="orderBy == 'userId'">
+        ORDER BY ba.user_id
+      </when>
+      <when test="orderBy == 'name'">
+        ORDER BY u.name
+      </when>
+      <otherwise>
+        ORDER BY ba.account_id
+      </otherwise>
+    </choose>
+    LIMIT #{offset}, #{size}
+  </select>
 </mapper>

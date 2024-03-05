@@ -3,13 +3,13 @@ package com.example.heccore.bank.model;
 import com.example.heccore.common.enums.Bank;
 import com.example.heccore.common.model.BaseVO;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class BankAccountWithUserVO extends BaseVO {
+public class BankAccountWithUserNameVO extends BaseVO {
 
     private Long accountId;
     private Long userId;
@@ -20,9 +20,8 @@ public class BankAccountWithUserVO extends BaseVO {
     private String name; // 사용자 이름 추가
 
 
-    public BankAccountWithUserVO(LocalDateTime createdAt, LocalDateTime updatedAt,
+    public BankAccountWithUserNameVO(
             Long accountId, Long userId, Bank bank, Long accountNumber, BigDecimal balance, String name) {
-        super(createdAt, updatedAt);
         this.accountId = accountId;
         this.userId = userId;
         this.bank = bank;

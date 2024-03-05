@@ -6,7 +6,7 @@ CREATE TABLE users
     updated_at TIMESTAMP,
     is_deleted BOOLEAN DEFAULT FALSE
 );
-CREATE TABLE bank_account
+CREATE TABLE bank_accounts
 (
     account_id     BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id        BIGINT NOT NULL,
