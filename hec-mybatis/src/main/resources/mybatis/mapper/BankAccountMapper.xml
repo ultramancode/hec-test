@@ -39,14 +39,14 @@
   <!-- 잔액 업데이트 -->
   <update id="updateBalance" parameterType="com.example.heccore.bank.model.BankAccountVO">
     UPDATE bank_accounts
-    SET balance = #{balance}, updated_at = #{updatedAt}
+    SET balance = #{balance}, updated_at = CURRENT_TIMESTAMP
     WHERE account_id = #{accountId}
   </update>
 
   <!-- 소프트 딜리트 메소드 -->
   <update id="softDeleteBankAccount" parameterType="com.example.heccore.bank.model.BankAccountVO">
     UPDATE bank_accounts
-    SET is_deleted = #{isDeleted}, updated_at = #{updatedAt}
+    SET is_deleted = #{isDeleted}, updated_at = CURRENT_TIMESTAMP
     WHERE account_id = #{accountId}
   </update>
 
@@ -112,5 +112,10 @@
       </otherwise>
     </choose>
     LIMIT #{offset}, #{size}
+  </select>
+
+  <!-- 계좌번호 존재 여부 확인 -->
+  <select id="isBankAccountNumberExists" parameterType="java.lang.Long" resultType="boolean">
+    SELECT CASE WHEN COUNT(*) > 0 THEN true ELSE false END FROM bank_accounts WHERE account_number = #{accountNumber}
   </select>
 </mapper>
