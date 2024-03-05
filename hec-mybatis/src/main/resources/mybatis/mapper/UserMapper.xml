@@ -3,9 +3,18 @@
 
 <mapper namespace= "com.example.hecmybatis.user.mapper.UserMapper">
 
-  <select id="getUserById" resultType="com.example.heccore.user.model.UserVO">
-    SELECT * FROM users WHERE id = #{id}
+  <resultMap id="UserResultMap" type="com.example.heccore.user.model.UserVO">
+    <id property="userId" column="user_id"/>
+    <result property="name" column="name"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="updatedAt" column="updated_at"/>
+    <result property="isDeleted" column="is_deleted"/>
+  </resultMap>
+
+  <select id="getUserById" resultMap="UserResultMap">
+    SELECT * FROM users WHERE user_id = #{userId}
   </select>
+
 
 
 </mapper>
