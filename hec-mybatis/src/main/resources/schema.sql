@@ -11,7 +11,7 @@ CREATE TABLE bank_accounts
     account_id     BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id        BIGINT NOT NULL,
     bank           ENUM('KB', 'NH', 'WOORI', 'SHINHAN') NOT NULL,
-    account_number VARCHAR(50),
+    account_number BIGINT,
     balance        DECIMAL(10, 2),
     created_at     TIMESTAMP,
     updated_at     TIMESTAMP,

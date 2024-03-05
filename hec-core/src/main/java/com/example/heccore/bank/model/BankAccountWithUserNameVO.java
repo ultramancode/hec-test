@@ -16,22 +16,7 @@ public class BankAccountWithUserNameVO extends BaseVO {
     private Bank bank;
     private Long accountNumber;
     private BigDecimal balance;
-    private boolean isDeleted = false;
+    private boolean isDeleted;
     private String name; // 사용자 이름 추가
-
-
-    public BankAccountWithUserNameVO(
-            Long accountId, Long userId, Bank bank, Long accountNumber, BigDecimal balance, String name) {
-        this.accountId = accountId;
-        this.userId = userId;
-        this.bank = bank;
-        this.accountNumber = accountNumber;
-        this.balance = balance;
-        this.name = name;
-    }
-    public void softDelete() {
-        this.isDeleted = true;
-    }
-
 
 }
