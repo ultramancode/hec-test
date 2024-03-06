@@ -1,5 +1,6 @@
 package com.example.hecmybatis.bankAccount.controller;
 
+import com.example.hecmybatis.bankAccount.dto.request.BankAccountAmountRequestDto;
 import com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto;
 import com.example.hecmybatis.bankAccount.dto.request.BankAccountRequestDto;
 import com.example.hecmybatis.bankAccount.dto.response.BankAccountResponseDto;
@@ -35,6 +36,21 @@ public class BankAccountController {
     public ResponseEntity<String> softDeleteBankAccount(@PathVariable Long accountId) {
         bankAccountService.softDeleteBankAccount(accountId);
         return ResponseEntity.ok().body("계좌 소프트 딜리트");
+    }
+    @PutMapping("/{accountId}/deposit")
+    public ResponseEntity<String> depositBankAccount(
+            @PathVariable Long accountId,
+            @RequestBody BankAccountAmountRequestDto bankAccountAmountRequestDto) {
+        bankAccountService.depositBankAccount(accountId, bankAccountAmountRequestDto);
+        return ResponseEntity.ok().body("입금 성공");
+    }
+
+    @PutMapping("/{accountId}/withdraw")
+    public ResponseEntity<String> withdrawBankAccount(
+            @PathVariable Long accountId,
+            @RequestBody BankAccountAmountRequestDto bankAccountAmountRequestDto) {
+        bankAccountService.withdrawBankAccount(accountId, bankAccountAmountRequestDto);
+        return ResponseEntity.ok().body("출금 성공");
     }
 
     @GetMapping("/{accountId}")
