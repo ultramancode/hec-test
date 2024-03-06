@@ -18,6 +18,8 @@ public interface BankAccountMapper {
 
     BankAccountVO getBankAccountById(Long userId);
 
+    BankAccountVO getBankAccountByIdWithLock(Long userId);
+
     List<BankAccountWithUserNameVO> getBankAccountsByUserId(Long userId);
 
     List<BankAccountWithUserNameVO> getBankAccountsWithUserNameAndOptions(BankAccountConditionDto bankAccountConditionDto);

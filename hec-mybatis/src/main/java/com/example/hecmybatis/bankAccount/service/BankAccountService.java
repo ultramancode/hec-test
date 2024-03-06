@@ -44,18 +44,20 @@ public class BankAccountService {
         }
     }
 
+    // 락이 걸린 getBankAccountByIdWithLock로 조회 후 수정 (동시성 이슈)
     @Transactional
     public void depositBankAccount(Long accountId,
             BankAccountAmountRequestDto bankAccountAmountRequestDto) {
-        BankAccountVO bankAccountVO = getBankAccountById(accountId);
+        BankAccountVO bankAccountVO = getBankAccountByIdWithLock(accountId);
         bankAccountVO.deposit(bankAccountAmountRequestDto.amount());
         bankAccountMapper.updateBalance(bankAccountVO);
     }
 
+    // 락이 걸린 getBankAccountByIdWithLock로 조회 후 수정 (동시성 이슈)
     @Transactional
-    public void withDrawBankAccount(Long accountId,
+    public void withdrawBankAccount(Long accountId,
             BankAccountAmountRequestDto bankAccountAmountRequestDto) {
-        BankAccountVO bankAccountVO = getBankAccountById(accountId);
+        BankAccountVO bankAccountVO = getBankAccountByIdWithLock(accountId);
         bankAccountVO.withdraw(bankAccountAmountRequestDto.amount());
         bankAccountMapper.updateBalance(bankAccountVO);
     }
@@ -117,6 +119,12 @@ public class BankAccountService {
     public BankAccountVO getBankAccountById(Long accountId) {
         Optional<BankAccountVO> optionalBankAccountVO = Optional.ofNullable(
                 bankAccountMapper.getBankAccountById(accountId));
+        return optionalBankAccountVO.orElseThrow(
+                () -> new HecCustomException(ErrorCode.ACCOUNT_IS_NOT_EXIST));
+    }
+    public BankAccountVO getBankAccountByIdWithLock(Long accountId) {
+        Optional<BankAccountVO> optionalBankAccountVO = Optional.ofNullable(
+                bankAccountMapper.getBankAccountByIdWithLock(accountId));
         return optionalBankAccountVO.orElseThrow(
                 () -> new HecCustomException(ErrorCode.ACCOUNT_IS_NOT_EXIST));
     }
