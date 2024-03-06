@@ -27,5 +27,6 @@ public interface BankAccountMapper {
 
     boolean isBankAccountNumberExists(Long bankAccountNumber);
 
+    void deleteAllBankAccounts();
 
 }

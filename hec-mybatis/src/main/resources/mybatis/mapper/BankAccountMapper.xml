@@ -31,7 +31,7 @@
 
 
   <!-- 계좌 생성 -->
-  <insert id="createBankAccount" parameterType="com.example.heccore.bank.model.BankAccountVO">
+  <insert id="createBankAccount" parameterType="com.example.heccore.bank.model.BankAccountVO" useGeneratedKeys="true" keyProperty="accountId">
     INSERT INTO bank_accounts (user_id, bank, account_number, balance, created_at, updated_at)
     VALUES (#{userId}, #{bank}, #{accountNumber}, #{balance}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
   </insert>
@@ -138,4 +138,8 @@
       #{accountId}
     </foreach>
   </update>
+
+  <delete id="deleteAllBankAccounts">
+    DELETE FROM bank_accounts
+  </delete>
 </mapper>

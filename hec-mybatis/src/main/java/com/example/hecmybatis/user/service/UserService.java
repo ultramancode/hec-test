@@ -29,9 +29,10 @@ public class UserService {
     private final BankAccountService bankAccountService;
 
     @Transactional
-    public void createUser(UserRequestDto userRequestDto) {
+    public Long createUser(UserRequestDto userRequestDto) {
         UserVO userVO = new UserVO(userRequestDto.name());
         userMapper.createUser(userVO);
+        return userVO.getUserId();
     }
 
     @Transactional
