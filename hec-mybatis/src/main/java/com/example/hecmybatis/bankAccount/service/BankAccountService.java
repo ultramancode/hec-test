@@ -12,10 +12,13 @@ import com.example.hecmybatis.bankAccount.dto.response.BankAccountResponseDto;
 import com.example.hecmybatis.bankAccount.mapper.BankAccountMapper;
 import com.example.hecmybatis.user.mapper.UserMapper;
 import com.example.hecmybatis.user.service.UserService;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,9 +32,9 @@ public class BankAccountService {
 
 
     @Transactional
-    public void createBankAccount(BankAccountRequestDto bankAccountRequestDto) {
+    public Long createBankAccount(BankAccountRequestDto bankAccountRequestDto) {
         Long bankAccountNumber = generateBankAccountNumber();
-        if (isBankAccountNumberExists(bankAccountNumber)) {
+        if (!isBankAccountNumberExists(bankAccountNumber)) {
             BankAccountVO bankAccountVO =
                     BankAccountVO.builder()
                             .accountNumber(bankAccountNumber)
@@ -40,6 +43,7 @@ public class BankAccountService {
                             .userId(bankAccountRequestDto.userId())
                             .build();
             bankAccountMapper.createBankAccount(bankAccountVO);
+            return bankAccountVO.getAccountId();
         } else {
             throw new HecCustomException(ErrorCode.ACCOUNT_NUMBER_IS_ALREADY_EXIST);
         }
@@ -48,7 +52,7 @@ public class BankAccountService {
     // 락이 걸린 getBankAccountByIdWithLock로 조회 후 수정 (동시성 이슈)
     @Transactional
     public void depositBankAccount(Long accountId,
-            BankAccountAmountRequestDto bankAccountAmountRequestDto) {
+                                   BankAccountAmountRequestDto bankAccountAmountRequestDto) {
         BankAccountVO bankAccountVO = getBankAccountByIdWithLock(accountId);
         bankAccountVO.deposit(bankAccountAmountRequestDto.amount());
         bankAccountMapper.updateBalance(bankAccountVO);
@@ -57,7 +61,7 @@ public class BankAccountService {
     // 락이 걸린 getBankAccountByIdWithLock로 조회 후 수정 (동시성 이슈)
     @Transactional
     public void withdrawBankAccount(Long accountId,
-            BankAccountAmountRequestDto bankAccountAmountRequestDto) {
+                                    BankAccountAmountRequestDto bankAccountAmountRequestDto) {
         BankAccountVO bankAccountVO = getBankAccountByIdWithLock(accountId);
         bankAccountVO.withdraw(bankAccountAmountRequestDto.amount());
         bankAccountMapper.updateBalance(bankAccountVO);
@@ -128,6 +132,7 @@ public class BankAccountService {
         return optionalBankAccountVO.orElseThrow(
                 () -> new HecCustomException(ErrorCode.ACCOUNT_IS_NOT_EXIST));
     }
+
     public BankAccountVO getBankAccountByIdWithLock(Long accountId) {
         Optional<BankAccountVO> optionalBankAccountVO = Optional.ofNullable(
                 bankAccountMapper.getBankAccountByIdWithLock(accountId));
@@ -137,12 +142,14 @@ public class BankAccountService {
 
     // 계좌를 생성할 때 계좌 번호를 생성하는 메서드
     public Long generateBankAccountNumber() {
-        // UUID를 사용하여 랜덤한 고유한 계좌 번호 생성
-        String bankAccountNumber = UUID.randomUUID().toString();
-        // 하이픈 제거 후 숫자만 남기도록 처리 (선택적)
-        bankAccountNumber = bankAccountNumber.replaceAll("-", "");
-        // 원하는 길이로 잘라서 반환
-        return Long.parseLong(bankAccountNumber.substring(0, 10));
+        Random random = new Random();
+        StringBuilder bankAccountNumberBuilder = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            // 0부터 9까지의 숫자 중에서 랜덤하게 선택하여 문자열에 추가
+            bankAccountNumberBuilder.append(random.nextInt(10));
+        }
+        // 문자열을 Long으로 변환하여 반환
+        return Long.parseLong(bankAccountNumberBuilder.toString());
     }
 
 

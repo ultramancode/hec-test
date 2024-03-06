@@ -55,7 +55,9 @@ public class UserService {
                 .map(BankAccountResponseDto::accountId)
                 .collect(Collectors.toList());
 
-        bankAccountService.softDeleteBankAccounts(accountIds);
+        if(accountIds.size() != 0) {
+            bankAccountService.softDeleteBankAccounts(accountIds);
+        }
         userVO.softDelete();
         userMapper.softDeleteUser(userVO);
     }
