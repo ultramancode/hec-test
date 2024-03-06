@@ -15,8 +15,9 @@ public interface BankAccountMapper {
     void updateBalance(BankAccountVO bankAccountVO);
 
     void softDeleteBankAccount(BankAccountVO bankAccountVO);
+    void softDeleteBankAccounts(List<Long> accountIds);
 
-    BankAccountVO getBankAccountById(Long userId);
+    BankAccountVO getBankAccountById(Long accountId);
 
     BankAccountVO getBankAccountByIdWithLock(Long userId);
 
@@ -25,4 +26,6 @@ public interface BankAccountMapper {
     List<BankAccountWithUserNameVO> getBankAccountsWithUserNameAndOptions(BankAccountConditionDto bankAccountConditionDto);
 
     boolean isBankAccountNumberExists(Long bankAccountNumber);
+
+
 }

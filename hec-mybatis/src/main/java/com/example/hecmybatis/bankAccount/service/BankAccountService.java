@@ -10,6 +10,7 @@ import com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto;
 import com.example.hecmybatis.bankAccount.dto.request.BankAccountRequestDto;
 import com.example.hecmybatis.bankAccount.dto.response.BankAccountResponseDto;
 import com.example.hecmybatis.bankAccount.mapper.BankAccountMapper;
+import com.example.hecmybatis.user.mapper.UserMapper;
 import com.example.hecmybatis.user.service.UserService;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BankAccountService {
 
     private final BankAccountMapper bankAccountMapper;
-    private final UserService userService;
+    private final UserMapper userMapper;
 
 
     @Transactional
@@ -72,10 +73,15 @@ public class BankAccountService {
         bankAccountMapper.softDeleteBankAccount(bankAccountVO);
     }
 
+    @Transactional
+    public void softDeleteBankAccounts(List<Long> accountIds) {
+        bankAccountMapper.softDeleteBankAccounts(accountIds);
+    }
+
     @Transactional(readOnly = true)
     public BankAccountResponseDto getBankAccount(Long accountId) {
-        BankAccountVO bankAccountVO = getBankAccountById(accountId);
-        UserVO userVO = userService.getUserVOById(bankAccountVO.getUserId());
+        BankAccountVO bankAccountVO = bankAccountMapper.getBankAccountById(accountId);
+        UserVO userVO = userMapper.getUserById(bankAccountVO.getUserId());
         return new BankAccountResponseDto(
                 accountId,
                 userVO.getName(),
@@ -138,5 +144,6 @@ public class BankAccountService {
         // 원하는 길이로 잘라서 반환
         return Long.parseLong(bankAccountNumber.substring(0, 10));
     }
+
 
 }

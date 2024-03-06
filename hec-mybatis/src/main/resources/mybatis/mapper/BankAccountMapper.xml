@@ -129,4 +129,13 @@
   </select>
 
 
+  <!-- 여러 개의 계좌를 소프트 딜리트하는 메소드(벌크 업데이트) -->
+  <update id="softDeleteBankAccounts" parameterType="java.util.List">
+    UPDATE bank_accounts
+    SET is_deleted = true, updated_at = CURRENT_TIMESTAMP
+    WHERE account_id IN
+    <foreach collection="list" item="accountId" open="(" separator="," close=")">
+      #{accountId}
+    </foreach>
+  </update>
 </mapper>
