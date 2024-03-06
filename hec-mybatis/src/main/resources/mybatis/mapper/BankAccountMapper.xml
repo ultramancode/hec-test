@@ -67,7 +67,7 @@
 
 
   <!-- 특정 사용자의 모든 계좌 조회  -->
-  <select id="getBankAccountsByUserId" resultMap="BankAccountWithUserResultMap">
+  <select id="getBankAccountsByUserId" resultMap="BankAccountWithUserNameResultMap">
     SELECT ba.*, u.name as name
     FROM bank_accounts ba
     LEFT JOIN users u ON ba.user_id = u.user_id
@@ -90,12 +90,6 @@
     <if test="accountNumber != null">
       AND ba.account_number = #{accountNumber}
     </if>
-    <if test="bank != null">
-      AND ba.bank = #{bank}
-    </if>
-    <if test="name != null">
-      AND u.name LIKE CONCAT('%', #{name}, '%')
-    </if>
     <if test="minBalance != null">
       AND ba.balance <![CDATA[ >= ]]> #{minBalance}
     </if>
@@ -105,7 +99,7 @@
     </where>
     <choose>
       <when test="orderBy == 'bank'">
-        ba.bank
+        ORDER BY ba.bank
       </when>
       <when test="orderBy == 'balance'">
         ORDER BY ba.balance
@@ -120,6 +114,12 @@
         ORDER BY ba.account_id
       </otherwise>
     </choose>
+    <if test="orderDirection != null and orderDirection.equals('asc')">
+      ASC
+    </if>
+    <if test="orderDirection != null and orderDirection.equals('desc')">
+      DESC
+    </if>
     LIMIT #{offset}, #{size}
   </select>
 

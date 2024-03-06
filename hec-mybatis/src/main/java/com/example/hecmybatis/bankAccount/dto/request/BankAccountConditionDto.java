@@ -16,6 +16,7 @@ public class BankAccountConditionDto {
     private BigDecimal minBalance;
     private BigDecimal maxBalance;
     private String orderBy;
+    private String orderDirection;
     private int page;
     private int size;
     private int offset;

@@ -58,6 +58,12 @@
         ORDER BY user_id
       </otherwise>
     </choose>
+    <if test="orderDirection != null and orderDirection.equals('asc')">
+      ASC
+    </if>
+    <if test="orderDirection != null and orderDirection.equals('desc')">
+      DESC
+    </if>
     LIMIT #{offset}, #{size}
   </select>
 

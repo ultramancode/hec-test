@@ -75,7 +75,6 @@ public class ControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> handleException(Exception e) {
         errorLog("handleException", e);
-        log.info("skdi");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .body(ApiResponse.failure(ErrorCode.INTERNAL_SERVER_ERROR));
     }

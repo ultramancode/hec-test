@@ -9,6 +9,7 @@ import lombok.Setter;
 public class UserConditionDto {
     private String name;
     private String orderBy;
+    private String orderDirection;
     private int page;
     private int size;
     private int offset;
