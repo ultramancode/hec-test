@@ -13,8 +13,6 @@ public class BankAccountConditionDto {
     private Long accountNumber;
     private Bank bank;
     private String name;
-    private BigDecimal minBalance;
-    private BigDecimal maxBalance;
     private String orderBy;
     private String orderDirection;
     private int page;

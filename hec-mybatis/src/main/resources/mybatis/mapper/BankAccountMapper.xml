@@ -90,14 +90,11 @@
     <if test="accountNumber != null">
       AND ba.account_number = #{accountNumber}
     </if>
-    <if test="minBalance != null">
-      AND ba.balance <![CDATA[ >= ]]> #{minBalance}
-    </if>
-    <if test="maxBalance != null">
-      AND ba.balance <![CDATA[ <= ]]> #{maxBalance}
-    </if>
     <if test="name != null and name != ''">
-      AND u.name LIKE CONCAT('%', #{name}, '%')
+      AND name LIKE '%' || #{name} || '%'
+    </if>
+    <if test="bank != null">
+      AND ba.bank = #{bank}
     </if>
     </where>
     <choose>

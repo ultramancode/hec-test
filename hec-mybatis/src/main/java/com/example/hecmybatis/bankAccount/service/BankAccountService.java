@@ -11,14 +11,10 @@ import com.example.hecmybatis.bankAccount.dto.request.BankAccountRequestDto;
 import com.example.hecmybatis.bankAccount.dto.response.BankAccountResponseDto;
 import com.example.hecmybatis.bankAccount.mapper.BankAccountMapper;
 import com.example.hecmybatis.user.mapper.UserMapper;
-import com.example.hecmybatis.user.service.UserService;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.UUID;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +59,24 @@ public class BankAccountService {
     public void withdrawBankAccount(Long accountId,
                                     BankAccountAmountRequestDto bankAccountAmountRequestDto) {
         BankAccountVO bankAccountVO = getBankAccountByIdWithLock(accountId);
+        bankAccountVO.withdraw(bankAccountAmountRequestDto.amount());
+        bankAccountMapper.updateBalance(bankAccountVO);
+    }
+
+    // 테스트 목적, 동시성 이슈 발생, Lock 걸지 않은 조회 메소드를 바탕으로 입 출금 시
+    @Transactional
+    public void depositBankAccountByNonLock(Long accountId,
+            BankAccountAmountRequestDto bankAccountAmountRequestDto) {
+        BankAccountVO bankAccountVO = getBankAccountById(accountId);
+        bankAccountVO.deposit(bankAccountAmountRequestDto.amount());
+        bankAccountMapper.updateBalance(bankAccountVO);
+    }
+
+    // 테스트 목적, 동시성 이슈 발생, Lock 걸지 않은 조회 메소드를 바탕으로 입 출금 시
+    @Transactional
+    public void withdrawBankAccountByNonLock(Long accountId,
+            BankAccountAmountRequestDto bankAccountAmountRequestDto) {
+        BankAccountVO bankAccountVO = getBankAccountById(accountId);
         bankAccountVO.withdraw(bankAccountAmountRequestDto.amount());
         bankAccountMapper.updateBalance(bankAccountVO);
     }
@@ -133,6 +147,7 @@ public class BankAccountService {
                 () -> new HecCustomException(ErrorCode.ACCOUNT_IS_NOT_EXIST));
     }
 
+    // 동시성 이슈 대비 DB Lock 걸은 조회 메소드
     public BankAccountVO getBankAccountByIdWithLock(Long accountId) {
         Optional<BankAccountVO> optionalBankAccountVO = Optional.ofNullable(
                 bankAccountMapper.getBankAccountByIdWithLock(accountId));
