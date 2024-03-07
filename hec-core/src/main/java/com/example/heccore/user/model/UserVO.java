@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-// Batch 모듈에서 RowMapper 빈을 생성하기 위해서 필요, 데이터베이스와 매핑 위함
 @Setter
 @NoArgsConstructor
 public class UserVO extends BaseVO {
@@ -27,4 +26,9 @@ public class UserVO extends BaseVO {
         this.name = name;
     }
 
+    // 스프링 배치 모듈에서 테이블 컬럼명 매핑할 때 사용
+    public void updateForBatchModule(Long userId, boolean isDeleted){
+        this.userId = userId;
+        this.isDeleted = isDeleted;
+    }
 }
