@@ -21,13 +21,16 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class BatchScheduleConfiguration {
 
     private final JobLauncher jobLauncher;
-    private final Job deleteJob;
+    private final Job userDeleteJob;
+    private final Job bankAccountDeleteJob;
 
 
     public BatchScheduleConfiguration(JobLauncher jobLauncher,
-                                      @Qualifier(JobName.USER_DELETE_JOB_BEAN) Job deleteJob){
+                                      @Qualifier(JobName.USER_DELETE_JOB_BEAN) Job userDeleteJob,
+                                      @Qualifier(JobName.BANK_ACCOUNT_DELETE_JOB_BEAN) Job bankAccountDeleteJob){
         this.jobLauncher = jobLauncher;
-        this.deleteJob = deleteJob;
+        this.userDeleteJob = userDeleteJob;
+        this.bankAccountDeleteJob = bankAccountDeleteJob;
     }
     /**
      * @1분마다 "0 * * * * *"
@@ -35,19 +38,36 @@ public class BatchScheduleConfiguration {
      * @10초마다 "0/10 * * * * *"
      */
     @Scheduled(cron = "0/10 * * * * *")
-    public void runDeleteBatch(){
-        log.info("=====================딜리트 배치 실행=====================");
+    public void runUserDeleteBatch(){
+        log.info("=====================유저 딜리트 배치 실행=====================");
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("version", "1.0")
-                .addString("usage", "Delete")
+                .addString("usage", "DeleteUser")
                 .addLong("timestamp", System.currentTimeMillis())
                 .toJobParameters();
         try{
-            jobLauncher.run(deleteJob, jobParameters);
+            jobLauncher.run(userDeleteJob, jobParameters);
         }catch (JobExecutionAlreadyRunningException | JobRestartException |
                 JobInstanceAlreadyCompleteException | JobParametersInvalidException e) {
             throw new RuntimeException(e);
         }
     }
+
+    @Scheduled(cron = "0/10 * * * * *")
+    public void runBankAccountDeleteBatch(){
+        log.info("=====================계좌 딜리트 배치 실행=====================");
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addString("version", "1.0")
+                .addString("usage", "DeleteBankAccount")
+                .addLong("timestamp", System.currentTimeMillis())
+                .toJobParameters();
+        try{
+            jobLauncher.run(bankAccountDeleteJob, jobParameters);
+        }catch (JobExecutionAlreadyRunningException | JobRestartException |
+                JobInstanceAlreadyCompleteException | JobParametersInvalidException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
@@ -46,7 +47,15 @@ public class BankAccountVO extends BaseVO {
         }
         this.balance -= amount;
     }
+
     public void softDelete() {
         this.isDeleted = true;
+    }
+
+    // 스프링 배치 모듈에서 테이블 컬럼명 매핑할 때 사용
+    public void updateForBatchModule(Long accountId, Long userId, boolean isDeleted) {
+        this.accountId = accountId;
+        this.userId = userId;
+        this.isDeleted = isDeleted;
     }
 }
