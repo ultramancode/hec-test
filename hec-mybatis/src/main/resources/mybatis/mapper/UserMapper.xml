@@ -45,7 +45,7 @@
     SELECT * FROM users
     <where>
       <if test="name != null and name != ''">
-        AND name LIKE CONCAT('%', #{name}, '%')
+        AND name LIKE '%' || #{name} || '%'
       </if>    </where>
     <choose>
       <when test="orderBy != null and orderBy.equals('name')">
