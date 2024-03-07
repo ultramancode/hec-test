@@ -13,7 +13,6 @@ import com.example.hecmybatis.user.dto.request.UserRequestDto;
 import com.example.hecmybatis.user.dto.response.UserResponseDto;
 import com.example.hecmybatis.user.mapper.UserMapper;
 import com.example.hecmybatis.user.service.UserService;
-import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -77,7 +76,8 @@ public class UserServiceIntegrationTest {
         UserRequestDto userRequestDto = new UserRequestDto("김태웅");
         Long userId = userService.createUser(userRequestDto);
 
-        BankAccountRequestDto bankAccountRequestDto = new BankAccountRequestDto(userId, Bank.SHINHAN, BigDecimal.valueOf(1));
+        BankAccountRequestDto bankAccountRequestDto = new BankAccountRequestDto(userId,
+                Bank.SHINHAN, 1000);
         Long accountId = bankAccountService.createBankAccount(bankAccountRequestDto);
         // when
         assertDoesNotThrow(() -> userService.softDeleteUser(userId));

@@ -20,11 +20,11 @@ public class BankAccountVO extends BaseVO {
     private Long userId;
     private Bank bank;
     private Long accountNumber;
-    private BigDecimal balance;
+    private int balance;
     private boolean isDeleted = false;
 
     @Builder
-    public BankAccountVO(Long userId, Bank bank, Long accountNumber, BigDecimal balance) {
+    public BankAccountVO(Long userId, Bank bank, Long accountNumber, int balance) {
         this.userId = userId;
         this.bank = bank;
         this.accountNumber = accountNumber;
@@ -32,22 +32,19 @@ public class BankAccountVO extends BaseVO {
     }
 
     // 입금 메소드
-    public void deposit(BigDecimal amount) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+    public void deposit(int amount) {
+        if (amount <= 0) {
             throw new HecCustomException(ErrorCode.DEPOSIT_IS_NOT_VALID);
         }
-        this.balance = this.balance.add(amount);
+        this.balance += amount;
     }
 
     // 출금 메소드
-    public void withdraw(BigDecimal amount) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+    public void withdraw(int amount) {
+        if (amount <= 0) {
             throw new HecCustomException(ErrorCode.WITHDRAW_IS_NOT_VALID);
         }
-        if (amount.compareTo(this.balance) > 0) {
-            throw new HecCustomException(ErrorCode.BALANCE_IS_NOT_VALID);
-        }
-        this.balance = this.balance.subtract(amount);
+        this.balance -= amount;
     }
     public void softDelete() {
         this.isDeleted = true;

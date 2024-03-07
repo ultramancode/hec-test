@@ -1,13 +1,27 @@
 package com.example.hecmybatis.user.unitTest;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.example.heccore.common.exception.HecCustomException;
 import com.example.heccore.user.model.UserVO;
+import com.example.hecmybatis.bankAccount.service.BankAccountService;
 import com.example.hecmybatis.user.dto.request.UserConditionDto;
 import com.example.hecmybatis.user.dto.request.UserNameUpdateRequestDto;
 import com.example.hecmybatis.user.dto.request.UserRequestDto;
 import com.example.hecmybatis.user.dto.response.UserResponseDto;
 import com.example.hecmybatis.user.mapper.UserMapper;
 import com.example.hecmybatis.user.service.UserService;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,19 +29,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 public class UserServiceUnitTest {
     @Mock
     private UserMapper userMapper;
 
     @InjectMocks
     private UserService userService;
+    @Mock
+    private BankAccountService bankAccountService;
 
     // mock 초기화
     @BeforeEach
@@ -93,7 +102,6 @@ public class UserServiceUnitTest {
         //given
         Long userId = 1L;
         UserVO userVO = new UserVO("김태웅");
-
         when(userMapper.getUserById(userId)).thenReturn(userVO);
 
         //when
