@@ -25,7 +25,7 @@ public class BatchScheduleConfiguration {
 
 
     public BatchScheduleConfiguration(JobLauncher jobLauncher,
-                                      @Qualifier(JobName.DELETE_JOB_BEAN) Job deleteJob){
+                                      @Qualifier(JobName.USER_DELETE_JOB_BEAN) Job deleteJob){
         this.jobLauncher = jobLauncher;
         this.deleteJob = deleteJob;
     }

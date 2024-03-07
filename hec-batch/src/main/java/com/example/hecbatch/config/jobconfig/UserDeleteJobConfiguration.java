@@ -2,7 +2,7 @@ package com.example.hecbatch.config.jobconfig;
 
 import com.example.hecbatch.config.listener.StopWatchJobListener;
 import com.example.hecbatch.config.stepconfig.StepName;
-import com.example.hecbatch.config.stepconfig.delete.DeleteProcessor;
+import com.example.hecbatch.config.stepconfig.userdelete.UserDeleteProcessor;
 import com.example.heccore.user.model.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +24,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
-import static com.example.hecbatch.config.stepconfig.Queries.DELETE_READ_QUERY;
-import static com.example.hecbatch.config.stepconfig.Queries.DELETE_WRITE_QUERY;
+import static com.example.hecbatch.config.stepconfig.Queries.USER_DELETE_READ_QUERY;
+import static com.example.hecbatch.config.stepconfig.Queries.USER_DELETE_WRITE_QUERY;
 
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-public class DeleteJobConfiguration {
+public class UserDeleteJobConfiguration {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager platformTransactionManager;
     private final DataSource dataSource;
@@ -38,49 +38,49 @@ public class DeleteJobConfiguration {
     private final int CHUNK_SIZE = 3;
 
 
-    @Bean(name = JobName.DELETE_JOB_BEAN)
-    public Job deleteJob() {
-        return new JobBuilder(JobName.DELETE_JOB, jobRepository)
-                .start(deleteStep())
+    @Bean(name = JobName.USER_DELETE_JOB_BEAN)
+    public Job UserDeleteJob() {
+        return new JobBuilder(JobName.USER_DELETE_JOB, jobRepository)
+                .start(UserDeleteStep())
                 .listener(stopWatchJobListener)
                 .build();
     }
 
-    @Bean(name = StepName.DELETE_STEP)
+    @Bean(name = StepName.USER_DELETE_STEP)
     @JobScope
-    public Step deleteStep() {
-        return new StepBuilder(StepName.DELETE_STEP, jobRepository)
+    public Step UserDeleteStep() {
+        return new StepBuilder(StepName.USER_DELETE_STEP, jobRepository)
                 .<UserVO, UserVO>chunk(CHUNK_SIZE, platformTransactionManager)
-                .reader(deleteReader())
-                .processor(deleteProcessor())
-                .writer(deleteWriter())
+                .reader(UserDeleteReader())
+                .processor(UserDeleteProcessor())
+                .writer(UserDeleteWriter())
                 .build();
     }
 
-    @Bean(name = StepName.DELETE_ITEM_READER)
+    @Bean(name = StepName.USER_DELETE_ITEM_READER)
     @StepScope
-    public JdbcCursorItemReader<UserVO> deleteReader() {
+    public JdbcCursorItemReader<UserVO> UserDeleteReader() {
         return new JdbcCursorItemReaderBuilder<UserVO>()
-                .name(StepName.DELETE_ITEM_READER)
-                .sql(DELETE_READ_QUERY)
+                .name(StepName.USER_DELETE_ITEM_READER)
+                .sql(USER_DELETE_READ_QUERY)
                 .rowMapper(userVORowMapper())
                 .dataSource(dataSource)
                 .saveState(true)
                 .build();
     }
 
-    @Bean(name = StepName.DELETE_ITEM_PROCESSOR)
+    @Bean(name = StepName.USER_DELETE_ITEM_PROCESSOR)
     @StepScope
-    public DeleteProcessor deleteProcessor() {
-        return new DeleteProcessor();
+    public UserDeleteProcessor UserDeleteProcessor() {
+        return new UserDeleteProcessor();
     }
 
-    @Bean(name = StepName.DELETE_ITEM_WRITER)
+    @Bean(name = StepName.USER_DELETE_ITEM_WRITER)
     @StepScope
-    public JdbcBatchItemWriter<UserVO> deleteWriter() {
+    public JdbcBatchItemWriter<UserVO> UserDeleteWriter() {
         return new JdbcBatchItemWriterBuilder<UserVO>()
                 .dataSource(dataSource)
-                .sql(DELETE_WRITE_QUERY)
+                .sql(USER_DELETE_WRITE_QUERY)
                 .assertUpdates(false)
                 .beanMapped()
                 .build();
