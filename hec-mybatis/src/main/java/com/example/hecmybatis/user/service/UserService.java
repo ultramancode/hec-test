@@ -1,12 +1,10 @@
 package com.example.hecmybatis.user.service;
 
-import com.example.heccore.bank.model.BankAccountVO;
 import com.example.heccore.common.exception.ErrorCode;
 import com.example.heccore.common.exception.HecCustomException;
 import com.example.heccore.user.model.UserVO;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto;
-import com.example.hecmybatis.bankAccount.dto.response.BankAccountResponseDto;
-import com.example.hecmybatis.bankAccount.service.BankAccountService;
+import com.example.hecmybatis.bankaccount.dto.response.BankAccountResponseDto;
+import com.example.hecmybatis.bankaccount.service.BankAccountService;
 import com.example.hecmybatis.user.dto.request.UserConditionDto;
 import com.example.hecmybatis.user.dto.request.UserNameUpdateRequestDto;
 import com.example.hecmybatis.user.dto.request.UserRequestDto;

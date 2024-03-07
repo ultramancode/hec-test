@@ -1,4 +1,4 @@
-package com.example.hecmybatis.bankAccount.unitTest;
+package com.example.hecmybatis.bankaccount.unitTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,12 +10,12 @@ import static org.mockito.Mockito.when;
 import com.example.heccore.bank.model.BankAccountVO;
 import com.example.heccore.bank.model.BankAccountWithUserNameVO;
 import com.example.heccore.common.enums.Bank;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountAmountRequestDto;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountRequestDto;
-import com.example.hecmybatis.bankAccount.dto.response.BankAccountResponseDto;
-import com.example.hecmybatis.bankAccount.mapper.BankAccountMapper;
-import com.example.hecmybatis.bankAccount.service.BankAccountService;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountAmountRequestDto;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountConditionDto;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountRequestDto;
+import com.example.hecmybatis.bankaccount.dto.response.BankAccountResponseDto;
+import com.example.hecmybatis.bankaccount.mapper.BankAccountMapper;
+import com.example.hecmybatis.bankaccount.service.BankAccountService;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,12 +1,11 @@
-package com.example.hecmybatis.bankAccount.mapper;
+package com.example.hecmybatis.bankaccount.mapper;
 
 import com.example.heccore.bank.model.BankAccountVO;
 import com.example.heccore.bank.model.BankAccountWithUserNameVO;
 
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountConditionDto;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface BankAccountMapper {

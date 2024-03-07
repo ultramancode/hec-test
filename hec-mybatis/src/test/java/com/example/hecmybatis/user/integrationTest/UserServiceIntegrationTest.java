@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.example.heccore.common.enums.Bank;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountRequestDto;
-import com.example.hecmybatis.bankAccount.mapper.BankAccountMapper;
-import com.example.hecmybatis.bankAccount.service.BankAccountService;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountRequestDto;
+import com.example.hecmybatis.bankaccount.mapper.BankAccountMapper;
+import com.example.hecmybatis.bankaccount.service.BankAccountService;
 import com.example.hecmybatis.user.dto.request.UserConditionDto;
 import com.example.hecmybatis.user.dto.request.UserNameUpdateRequestDto;
 import com.example.hecmybatis.user.dto.request.UserRequestDto;
@@ -120,7 +120,7 @@ public class UserServiceIntegrationTest {
         List<UserResponseDto> userResponseDtos = userService.getUsersWithOptions(userConditionDto);
 
         // then (페이징 테스트)
-        // 사이즈 3일 때 2페이지의 첫번째 유저는 유저 아이디가 4여야 하니까
+        // 사이즈 3일 때 2페이지의 첫번째 유저는 4번째 생성된 것이어야 하니까
         assertThat(userResponseDtos.get(0).name()).isEqualTo("김태웅4");
     }
 

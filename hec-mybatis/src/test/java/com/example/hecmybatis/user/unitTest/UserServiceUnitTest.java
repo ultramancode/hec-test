@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 
 import com.example.heccore.common.exception.HecCustomException;
 import com.example.heccore.user.model.UserVO;
-import com.example.hecmybatis.bankAccount.service.BankAccountService;
+import com.example.hecmybatis.bankaccount.service.BankAccountService;
 import com.example.hecmybatis.user.dto.request.UserConditionDto;
 import com.example.hecmybatis.user.dto.request.UserNameUpdateRequestDto;
 import com.example.hecmybatis.user.dto.request.UserRequestDto;

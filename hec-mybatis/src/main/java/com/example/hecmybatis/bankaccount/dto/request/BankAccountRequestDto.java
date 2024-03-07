@@ -1,4 +1,4 @@
-package com.example.hecmybatis.bankAccount.dto.request;
+package com.example.hecmybatis.bankaccount.dto.request;
 
 import com.example.heccore.common.enums.Bank;
 

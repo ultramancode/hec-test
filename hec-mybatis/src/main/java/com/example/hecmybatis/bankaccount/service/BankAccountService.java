@@ -1,15 +1,15 @@
-package com.example.hecmybatis.bankAccount.service;
+package com.example.hecmybatis.bankaccount.service;
 
 import com.example.heccore.bank.model.BankAccountVO;
 import com.example.heccore.bank.model.BankAccountWithUserNameVO;
 import com.example.heccore.common.exception.ErrorCode;
 import com.example.heccore.common.exception.HecCustomException;
 import com.example.heccore.user.model.UserVO;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountAmountRequestDto;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountRequestDto;
-import com.example.hecmybatis.bankAccount.dto.response.BankAccountResponseDto;
-import com.example.hecmybatis.bankAccount.mapper.BankAccountMapper;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountAmountRequestDto;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountConditionDto;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountRequestDto;
+import com.example.hecmybatis.bankaccount.dto.response.BankAccountResponseDto;
+import com.example.hecmybatis.bankaccount.mapper.BankAccountMapper;
 import com.example.hecmybatis.user.mapper.UserMapper;
 import java.util.List;
 import java.util.Optional;

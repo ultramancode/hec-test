@@ -1,4 +1,4 @@
-package com.example.hecmybatis.bankAccount.integrationTest;
+package com.example.hecmybatis.bankaccount.integrationTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,12 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import com.example.heccore.bank.model.BankAccountVO;
 import com.example.heccore.common.enums.Bank;
 import com.example.heccore.user.model.UserVO;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountAmountRequestDto;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountRequestDto;
-import com.example.hecmybatis.bankAccount.dto.response.BankAccountResponseDto;
-import com.example.hecmybatis.bankAccount.mapper.BankAccountMapper;
-import com.example.hecmybatis.bankAccount.service.BankAccountService;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountAmountRequestDto;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountConditionDto;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountRequestDto;
+import com.example.hecmybatis.bankaccount.dto.response.BankAccountResponseDto;
+import com.example.hecmybatis.bankaccount.mapper.BankAccountMapper;
+import com.example.hecmybatis.bankaccount.service.BankAccountService;
 import com.example.hecmybatis.user.dto.request.UserRequestDto;
 import com.example.hecmybatis.user.mapper.UserMapper;
 import com.example.hecmybatis.user.service.UserService;
@@ -177,9 +177,10 @@ public class BankAccountServiceIntegrationTest {
                 bankAccountConditionDto);
 
         // then
-        // 사이즈 3일 때 2페이지의 첫번째 계좌는 아이디가 4여야 하니까
-        Assertions.assertThat(bankAccountService.getBankAccount(4L).accountId())
-                .isEqualTo(bankAccountResponseDtos.get(0).accountId());
+        // 사이즈 3일 때 2페이지의 첫번째 계좌는 4번째 생선된 것이까
+        Assertions.assertThat(bankAccountResponseDtos.get(0).name()).isEqualTo("김태웅4");
+        Assertions.assertThat(bankAccountResponseDtos.get(0).bank()).isEqualTo(Bank.KB);
+        Assertions.assertThat(bankAccountResponseDtos.get(0).balance()).isEqualTo(1000);
     }
 
     @Test

@@ -1,10 +1,8 @@
-package com.example.hecmybatis.bankAccount.dto.request;
+package com.example.hecmybatis.bankaccount.dto.request;
 
 import com.example.heccore.common.enums.Bank;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter

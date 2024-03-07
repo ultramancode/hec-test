@@ -1,4 +1,4 @@
-package com.example.hecmybatis.bankAccount.unitTest;
+package com.example.hecmybatis.bankaccount.unitTest;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -11,12 +11,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.heccore.common.enums.Bank;
-import com.example.hecmybatis.bankAccount.controller.BankAccountController;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountAmountRequestDto;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountRequestDto;
-import com.example.hecmybatis.bankAccount.dto.response.BankAccountResponseDto;
-import com.example.hecmybatis.bankAccount.service.BankAccountService;
+import com.example.hecmybatis.bankaccount.controller.BankAccountController;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountAmountRequestDto;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountConditionDto;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountRequestDto;
+import com.example.hecmybatis.bankaccount.dto.response.BankAccountResponseDto;
+import com.example.hecmybatis.bankaccount.service.BankAccountService;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;

@@ -1,10 +1,10 @@
-package com.example.hecmybatis.bankAccount.controller;
+package com.example.hecmybatis.bankaccount.controller;
 
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountAmountRequestDto;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto;
-import com.example.hecmybatis.bankAccount.dto.request.BankAccountRequestDto;
-import com.example.hecmybatis.bankAccount.dto.response.BankAccountResponseDto;
-import com.example.hecmybatis.bankAccount.service.BankAccountService;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountAmountRequestDto;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountConditionDto;
+import com.example.hecmybatis.bankaccount.dto.request.BankAccountRequestDto;
+import com.example.hecmybatis.bankaccount.dto.response.BankAccountResponseDto;
+import com.example.hecmybatis.bankaccount.service.BankAccountService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

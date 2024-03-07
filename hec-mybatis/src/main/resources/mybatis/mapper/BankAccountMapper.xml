@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.hecmybatis.bankAccount.mapper.BankAccountMapper">
+<mapper namespace="com.example.hecmybatis.bankaccount.mapper.BankAccountMapper">
 
   <resultMap id="BankAccountResultMap" type="com.example.heccore.bank.model.BankAccountVO">
     <id property="accountId" column="account_id"/>
@@ -79,7 +79,7 @@
 
 
   <!-- 사용자 이름을 포함한 계좌 정보를 가져오는 쿼리 (다양한 옵션 고려)-->
-  <select id="getBankAccountsWithUserNameAndOptions" resultMap="BankAccountWithUserNameResultMap" parameterType="com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto">
+  <select id="getBankAccountsWithUserNameAndOptions" resultMap="BankAccountWithUserNameResultMap" parameterType="com.example.hecmybatis.bankaccount.dto.request.BankAccountConditionDto">
     SELECT ba.*, u.name as name
     FROM bank_accounts ba
     LEFT JOIN users u ON ba.user_id = u.user_id
