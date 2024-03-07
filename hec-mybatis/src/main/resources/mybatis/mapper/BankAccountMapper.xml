@@ -54,14 +54,15 @@
   <select id="getBankAccountById" resultMap="BankAccountResultMap">
     SELECT *
     FROM bank_accounts
-    WHERE account_id = #{accountId}
+    WHERE account_id = #{accountId} AND is_deleted = FALSE
+
   </select>
 
   <!-- 락이 걸린 단일 계좌 조회(Lock O, 입출금 메소드에서 조회 시에 사용할 것) -->
   <select id="getBankAccountByIdWithLock" resultMap="BankAccountResultMap">
     SELECT *
     FROM bank_accounts
-    WHERE account_id = #{accountId}
+    WHERE account_id = #{accountId} AND is_deleted = FALSE
       FOR UPDATE
   </select>
 
@@ -75,6 +76,7 @@
     <if test="userId != null">
       ba.user_id = #{userId}
     </if>
+    AND ba.is_deleted = false
   </select>
 
 
@@ -96,6 +98,7 @@
     <if test="bank != null">
       AND ba.bank = #{bank}
     </if>
+      AND ba.is_deleted = FALSE
     </where>
     <choose>
       <when test="orderBy == 'bank'">

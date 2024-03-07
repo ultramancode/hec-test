@@ -37,7 +37,7 @@
 
 <!--  사용자 단건 조회 -->
   <select id="getUserById" resultMap="UserResultMap">
-    SELECT * FROM users WHERE user_id = #{userId}
+    SELECT * FROM users WHERE user_id = #{userId} AND is_deleted = FALSE
   </select>
 
   <!-- 다양한 옵션을 고려한 사용자 조회 -->
@@ -46,7 +46,9 @@
     <where>
       <if test="name != null and name != ''">
         AND name LIKE '%' || #{name} || '%'
-      </if>    </where>
+      </if>
+      AND is_deleted = FALSE
+    </where>
     <choose>
       <when test="orderBy != null and orderBy.equals('name')">
         ORDER BY name

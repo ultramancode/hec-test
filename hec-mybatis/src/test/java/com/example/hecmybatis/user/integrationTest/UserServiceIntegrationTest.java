@@ -2,8 +2,10 @@ package com.example.hecmybatis.user.integrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.example.heccore.common.enums.Bank;
+import com.example.heccore.common.exception.HecCustomException;
 import com.example.hecmybatis.bankaccount.dto.request.BankAccountRequestDto;
 import com.example.hecmybatis.bankaccount.mapper.BankAccountMapper;
 import com.example.hecmybatis.bankaccount.service.BankAccountService;
@@ -83,8 +85,7 @@ public class UserServiceIntegrationTest {
         assertDoesNotThrow(() -> userService.softDeleteUser(userId));
 
         // then
-        assertThat(userMapper.getUserById(userId).isDeleted()).isSameAs(true);
-        assertThat(bankAccountMapper.getBankAccountById(accountId).isDeleted()).isSameAs(true);
+        assertThrows((HecCustomException.class),() -> userService.getUser(userId));
     }
 
     @Test
