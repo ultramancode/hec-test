@@ -161,7 +161,7 @@ public class UserServiceUnitTest {
     }
 
     @Test
-    @DisplayName("유저 다양한 조건 조회")
+    @DisplayName("유저 조건 조회")
     void getUsersWithOptions_Success() {
 
         //given

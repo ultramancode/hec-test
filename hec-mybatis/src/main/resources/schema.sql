@@ -12,7 +12,7 @@ CREATE TABLE bank_accounts
     user_id        BIGINT NOT NULL,
     bank           ENUM('KB', 'NH', 'WOORI', 'SHINHAN') NOT NULL,
     account_number BIGINT,
-    balance        DECIMAL(10, 2),
+    balance        INTEGER,
     created_at     TIMESTAMP,
     updated_at     TIMESTAMP,
     is_deleted     BOOLEAN DEFAULT FALSE,
