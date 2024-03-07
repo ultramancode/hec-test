@@ -2,10 +2,12 @@ package com.example.hecmybatis.bankAccount.integrationTest;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 import com.example.heccore.bank.model.BankAccountVO;
 import com.example.heccore.common.enums.Bank;
 import com.example.heccore.user.model.UserVO;
+import com.example.hecmybatis.bankAccount.dto.request.BankAccountAmountRequestDto;
 import com.example.hecmybatis.bankAccount.dto.request.BankAccountConditionDto;
 import com.example.hecmybatis.bankAccount.dto.request.BankAccountRequestDto;
 import com.example.hecmybatis.bankAccount.dto.response.BankAccountResponseDto;
@@ -14,7 +16,11 @@ import com.example.hecmybatis.bankAccount.service.BankAccountService;
 import com.example.hecmybatis.user.dto.request.UserRequestDto;
 import com.example.hecmybatis.user.mapper.UserMapper;
 import com.example.hecmybatis.user.service.UserService;
+import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -60,6 +66,72 @@ public class BankAccountServiceIntegrationTest {
         assertThat(accountId).isEqualTo(1L);
     }
 
+
+    @Test
+    @DisplayName("동시성 입출금 테스트 - 성공 (DB Lock)")
+    void concurrentDepositWithdrawTest_Success() {
+        // given
+        UserRequestDto userRequestDto = new UserRequestDto("김태웅");
+        Long userId = userService.createUser(userRequestDto);
+        BankAccountRequestDto bankAccountRequestDto = new BankAccountRequestDto(userId,
+                Bank.SHINHAN, 10000);
+        Long accountId = bankAccountService.createBankAccount(bankAccountRequestDto);
+        BankAccountAmountRequestDto depositRequestDto = new BankAccountAmountRequestDto(500);
+        BankAccountAmountRequestDto withdrawRequestDto = new BankAccountAmountRequestDto(300);
+
+        // 동시성을 테스트하기 위해 쓰레드 풀을 생성
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+
+        // when
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            for (int i = 0; i < 10; i++) {
+                executorService.submit(() -> {
+                    bankAccountService.depositBankAccount(accountId, depositRequestDto);
+                    bankAccountService.withdrawBankAccount(accountId, withdrawRequestDto);
+                });
+            }
+            // 모든 작업이 완료될 때까지 대기
+            executorService.shutdown();
+            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+        });
+
+        // then
+        assertThat(bankAccountService.getBankAccount(accountId).balance()).isEqualTo(12000);
+    }
+
+
+    @Test
+    @DisplayName("동시성 입출금 테스트 - 실패 (Lock 안 걸은 조회 메소드 사용하는 경우")
+    void concurrentDepositWithdrawTest_Failure() {
+        // given
+        UserRequestDto userRequestDto = new UserRequestDto("김태웅");
+        Long userId = userService.createUser(userRequestDto);
+        BankAccountRequestDto bankAccountRequestDto = new BankAccountRequestDto(userId,
+                Bank.SHINHAN, 10000);
+        Long accountId = bankAccountService.createBankAccount(bankAccountRequestDto);
+        BankAccountAmountRequestDto depositRequestDto = new BankAccountAmountRequestDto(500);
+        BankAccountAmountRequestDto withdrawRequestDto = new BankAccountAmountRequestDto(300);
+
+        // 동시성을 테스트하기 위해 쓰레드 풀을 생성
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+
+        // when
+        assertTimeoutPreemptively(Duration.ofSeconds(10), () -> {
+            for (int i = 0; i < 10; i++) {
+                executorService.submit(() -> {
+//                   //Lock 걸지 않은 조회 메소드
+                    bankAccountService.depositBankAccountByNonLock(accountId, depositRequestDto);
+                    bankAccountService.withdrawBankAccountByNonLock(accountId, withdrawRequestDto);
+                });
+            }
+            // 모든 작업이 완료될 때까지 대기
+            executorService.shutdown();
+            executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+        });
+
+        // then
+        assertThat(bankAccountService.getBankAccount(accountId).balance()).isNotEqualTo(12000);
+    }
 
     @Test
     @DisplayName("계좌 조회 테스트")
