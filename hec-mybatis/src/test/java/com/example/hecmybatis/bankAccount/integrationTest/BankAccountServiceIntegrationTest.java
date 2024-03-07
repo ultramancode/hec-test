@@ -63,7 +63,9 @@ public class BankAccountServiceIntegrationTest {
         Long accountId = bankAccountService.createBankAccount(bankAccountRequestDto);
 
         // then
-        assertThat(accountId).isEqualTo(1L);
+        assertThat(bankAccountMapper.getBankAccountById(accountId).getUserId()).isEqualTo(userId);
+        assertThat(bankAccountMapper.getBankAccountById(accountId).getBank()).isEqualTo(bankAccountRequestDto.bank());
+        assertThat(bankAccountMapper.getBankAccountById(accountId).getBalance()).isEqualTo(bankAccountRequestDto.balance());
     }
 
 
@@ -149,7 +151,6 @@ public class BankAccountServiceIntegrationTest {
                 accountId);
 
         // then
-        assertThat(bankAccountResponseDto.accountId()).isEqualTo(bankAccountById.getUserId());
         assertThat(bankAccountResponseDto.bank()).isEqualTo(bankAccountById.getBank());
         assertThat(bankAccountResponseDto.accountNumber()).isEqualTo(
                 bankAccountById.getAccountNumber());

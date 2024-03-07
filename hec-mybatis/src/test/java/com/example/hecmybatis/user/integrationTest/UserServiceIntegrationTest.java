@@ -121,7 +121,7 @@ public class UserServiceIntegrationTest {
 
         // then (페이징 테스트)
         // 사이즈 3일 때 2페이지의 첫번째 유저는 유저 아이디가 4여야 하니까
-        assertThat(userService.getUser(4L).userId()).isEqualTo(userResponseDtos.get(0).userId());
+        assertThat(userResponseDtos.get(0).name()).isEqualTo("김태웅4");
     }
 
 
