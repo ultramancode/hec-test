@@ -15,7 +15,7 @@ import java.time.Duration;
 
 
 @RestController
-@RequestMapping("/api/v1/hec-test")
+@RequestMapping("/webflux-api/v1/hec-test")
 public class HecTestController {
     private final WebClient webClient;
     private static final String BASE_URL = "http://date.jsontest.com";

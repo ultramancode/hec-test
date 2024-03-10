@@ -16,10 +16,22 @@ repositories {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
+
+    // database
+    implementation 'io.r2dbc:r2dbc-h2'
+    implementation 'com.h2database:h2'
+
+
+    // module
+    implementation(project(":hec-core"))
+
 }
 
 tasks.named('test') {
