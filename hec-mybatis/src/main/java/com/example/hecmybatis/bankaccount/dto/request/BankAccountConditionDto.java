@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BankAccountConditionDto {
-    private Long userId;
     private Long accountNumber;
     private Bank bank;
     private String name;

@@ -35,7 +35,7 @@ public class UserService {
 
     @Transactional
     public void updateUserName(Long userId, UserNameUpdateRequestDto userNameUpdateRequestDto) {
-        UserVO userVO = getUserVOById(userId);
+        UserVO userVO = getUserVOByIdAndDeletedIsFalse(userId);
         // 업데이트할 사용자 이름 설정
         userVO.updateUserName(userNameUpdateRequestDto.name());
         // 사용자 정보 업데이트
@@ -44,11 +44,11 @@ public class UserService {
 
     @Transactional
     public void softDeleteUser(Long userId) {
-        UserVO userVO = getUserVOById(userId);
+        UserVO userVO = getUserVOByIdAndDeletedIsFalse(userId);
         if (userVO.isDeleted()) {
             throw new HecCustomException(ErrorCode.USER_IS_ALREADY_DELETED);
         }
-        List<Long> accountIds = bankAccountService.getBankAccountsByUserId(userId)
+        List<Long> accountIds = bankAccountService.getBankAccountsByUserIdWithDeletedIsFalse(userId)
                 .stream()
                 .map(BankAccountResponseDto::accountId)
                 .collect(Collectors.toList());
@@ -59,10 +59,24 @@ public class UserService {
         userVO.softDelete();
         userMapper.softDeleteUser(userVO);
     }
+    @Transactional
+    public void hardDeleteUser(Long userId) {
+        UserVO userVO = getUserVOById(userId);
+        List<Long> accountIds = bankAccountService.getBankAccountsByUserId(userId)
+                .stream()
+                .map(BankAccountResponseDto::accountId)
+                .collect(Collectors.toList());
+
+        if(accountIds.size() != 0) {
+            bankAccountService.hardDeleteBankAccounts(accountIds);
+        }
+        userVO.softDelete();
+        userMapper.hardDeleteUser(userVO);
+    }
 
     @Transactional(readOnly = true)
     public UserResponseDto getUser(Long userId) {
-        UserVO userVO = getUserVOById(userId);
+        UserVO userVO = getUserVOByIdAndDeletedIsFalse(userId);
         return new UserResponseDto(userVO.getUserId(), userVO.getName());
     }
 
@@ -73,9 +87,15 @@ public class UserService {
                 new UserResponseDto(userVO.getUserId(), userVO.getName())).collect(Collectors.toList());
     }
 
+    public UserVO getUserVOByIdAndDeletedIsFalse(Long userId) {
+        Optional<UserVO> userOptional = Optional.ofNullable(userMapper.getUserByIdAndDeletedIsFalse(userId));
+        return userOptional.orElseThrow(() -> new HecCustomException(ErrorCode.USER_IS_NOT_EXIST));
+    }
+
     public UserVO getUserVOById(Long userId) {
         Optional<UserVO> userOptional = Optional.ofNullable(userMapper.getUserById(userId));
         return userOptional.orElseThrow(() -> new HecCustomException(ErrorCode.USER_IS_NOT_EXIST));
     }
+
 
 }

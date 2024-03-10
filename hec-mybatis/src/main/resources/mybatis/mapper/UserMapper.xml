@@ -35,9 +35,18 @@
     WHERE user_id = #{userId}
   </update>
 
-<!--  사용자 단건 조회 -->
-  <select id="getUserById" resultMap="UserResultMap">
+  <!-- 사용자를 하드 딜리트하는 메소드 -->
+  <delete id="hardDeleteUser" parameterType="com.example.heccore.user.model.UserVO">
+    DELETE FROM users
+    WHERE user_id = #{userId}
+  </delete>
+<!--  사용자 단건 조회 (소프트 딜리트 안된 상태)-->
+  <select id="getUserByIdAndDeletedIsFalse" resultMap="UserResultMap">
     SELECT * FROM users WHERE user_id = #{userId} AND is_deleted = FALSE
+  </select>
+  <!--  사용자 단건 조회 -->
+  <select id="getUserById" resultMap="UserResultMap">
+    SELECT * FROM users WHERE user_id = #{userId}
   </select>
 
   <!-- 다양한 옵션을 고려한 사용자 조회 -->
@@ -69,6 +78,11 @@
     LIMIT #{offset}, #{size}
   </select>
 
+  <select id="isUserExists" resultType="java.lang.Boolean">
+    SELECT EXISTS(
+      SELECT CASE WHEN COUNT(*) > 0 THEN true ELSE false END FROM users WHERE user_id = #{userId}
+    )
+  </select>
   <delete id="deleteAllUsers">
     DELETE FROM users
   </delete>

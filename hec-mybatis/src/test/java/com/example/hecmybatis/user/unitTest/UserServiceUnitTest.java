@@ -68,7 +68,7 @@ public class UserServiceUnitTest {
         UserNameUpdateRequestDto userNameUpdateRequestDto = new UserNameUpdateRequestDto("김태웅_수정");
         UserVO userVO = new UserVO("김태웅");
 
-        when(userMapper.getUserById(userId)).thenReturn(userVO);
+        when(userMapper.getUserByIdAndDeletedIsFalse(userId)).thenReturn(userVO);
 
         //when
         assertDoesNotThrow(() -> userService.updateUserName(userId, userNameUpdateRequestDto));
@@ -86,7 +86,7 @@ public class UserServiceUnitTest {
         Long userId = 1L;
         UserNameUpdateRequestDto userNameUpdateRequestDto = new UserNameUpdateRequestDto("Jane Doe");
 
-        when(userMapper.getUserById(userId)).thenReturn(null);
+        when(userMapper.getUserByIdAndDeletedIsFalse(userId)).thenReturn(null);
 
         //when, then
         assertThrows(HecCustomException.class, () -> userService.updateUserName(userId, userNameUpdateRequestDto));
@@ -102,7 +102,7 @@ public class UserServiceUnitTest {
         //given
         Long userId = 1L;
         UserVO userVO = new UserVO("김태웅");
-        when(userMapper.getUserById(userId)).thenReturn(userVO);
+        when(userMapper.getUserByIdAndDeletedIsFalse(userId)).thenReturn(userVO);
 
         //when
         assertDoesNotThrow(() -> userService.softDeleteUser(userId));
@@ -120,7 +120,7 @@ public class UserServiceUnitTest {
         Long userId = 1L;
         UserVO userVO = new UserVO("김태웅");
         userVO.softDelete();
-        when(userMapper.getUserById(userId)).thenReturn(userVO);
+        when(userMapper.getUserByIdAndDeletedIsFalse(userId)).thenReturn(userVO);
 
         //when, then
         assertThrows(HecCustomException.class, () -> userService.softDeleteUser(userId));
@@ -137,7 +137,7 @@ public class UserServiceUnitTest {
         Long userId = 1L;
         UserVO userVO = new UserVO("김태웅");
 
-        when(userMapper.getUserById(userId)).thenReturn(userVO);
+        when(userMapper.getUserByIdAndDeletedIsFalse(userId)).thenReturn(userVO);
 
         //when
         UserResponseDto userResponseDto = userService.getUser(userId);
@@ -154,7 +154,7 @@ public class UserServiceUnitTest {
 
         //given
         Long userId = 1L;
-        when(userMapper.getUserById(userId)).thenReturn(null);
+        when(userMapper.getUserByIdAndDeletedIsFalse(userId)).thenReturn(null);
 
         //when, then
         assertThrows(HecCustomException.class, () -> userService.getUser(userId));

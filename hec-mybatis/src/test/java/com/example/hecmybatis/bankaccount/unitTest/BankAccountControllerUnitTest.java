@@ -137,7 +137,7 @@ public class BankAccountControllerUnitTest {
                 new BankAccountResponseDto(2L, "김태웅", Bank.SHINHAN, 2L, 2000)
         );
 
-        when(bankAccountService.getBankAccountsByUserId(userId)).thenReturn(
+        when(bankAccountService.getBankAccountsByUserIdWithDeletedIsFalse(userId)).thenReturn(
                 bankAccountResponseDtos);
 
         //when, then
@@ -161,7 +161,7 @@ public class BankAccountControllerUnitTest {
                 .andExpect(
                         jsonPath("$[1].balance").value(bankAccountResponseDtos.get(1).balance()));
         //then
-        verify(bankAccountService, times(1)).getBankAccountsByUserId(userId);
+        verify(bankAccountService, times(1)).getBankAccountsByUserIdWithDeletedIsFalse(userId);
     }
 
     @Test

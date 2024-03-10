@@ -53,7 +53,7 @@ public class UserServiceIntegrationTest {
         Long userId = userService.createUser(userRequestDto);
 
         // then
-        assertThat(userService.getUserVOById(userId).getName()).isEqualTo(userRequestDto.name());
+        assertThat(userService.getUserVOByIdAndDeletedIsFalse(userId).getName()).isEqualTo(userRequestDto.name());
     }
 
     @Test
@@ -68,7 +68,7 @@ public class UserServiceIntegrationTest {
         assertDoesNotThrow(() -> userService.updateUserName(userId, userNameUpdateRequestDto));
 
         // then
-        assertThat(userService.getUserVOById(userId).getName()).isEqualTo(userNameUpdateRequestDto.name());
+        assertThat(userService.getUserVOByIdAndDeletedIsFalse(userId).getName()).isEqualTo(userNameUpdateRequestDto.name());
     }
 
     @Test

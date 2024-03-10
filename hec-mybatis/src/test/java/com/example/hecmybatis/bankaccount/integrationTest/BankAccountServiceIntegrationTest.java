@@ -63,9 +63,9 @@ public class BankAccountServiceIntegrationTest {
         Long accountId = bankAccountService.createBankAccount(bankAccountRequestDto);
 
         // then
-        assertThat(bankAccountMapper.getBankAccountById(accountId).getUserId()).isEqualTo(userId);
-        assertThat(bankAccountMapper.getBankAccountById(accountId).getBank()).isEqualTo(bankAccountRequestDto.bank());
-        assertThat(bankAccountMapper.getBankAccountById(accountId).getBalance()).isEqualTo(bankAccountRequestDto.balance());
+        assertThat(bankAccountMapper.getBankAccountByIdAndDeletedIsFalse(accountId).getUserId()).isEqualTo(userId);
+        assertThat(bankAccountMapper.getBankAccountByIdAndDeletedIsFalse(accountId).getBank()).isEqualTo(bankAccountRequestDto.bank());
+        assertThat(bankAccountMapper.getBankAccountByIdAndDeletedIsFalse(accountId).getBalance()).isEqualTo(bankAccountRequestDto.balance());
     }
 
 
@@ -141,11 +141,11 @@ public class BankAccountServiceIntegrationTest {
         // given
         UserRequestDto userRequestDto = new UserRequestDto("김태웅");
         Long userId = userService.createUser(userRequestDto);
-        UserVO userVOById = userService.getUserVOById(userId);
+        UserVO userVOById = userService.getUserVOByIdAndDeletedIsFalse(userId);
         BankAccountRequestDto bankAccountRequestDto = new BankAccountRequestDto(userId, Bank.KB,
                 1000);
         Long accountId = bankAccountService.createBankAccount(bankAccountRequestDto);
-        BankAccountVO bankAccountById = bankAccountService.getBankAccountById(accountId);
+        BankAccountVO bankAccountById = bankAccountService.getBankAccountByIdAndDeletedIsFalse(accountId);
         // when
         BankAccountResponseDto bankAccountResponseDto = bankAccountService.getBankAccount(
                 accountId);

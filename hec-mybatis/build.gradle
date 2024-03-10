@@ -40,7 +40,6 @@ dependencies {
 
     // module
     implementation(project(":hec-core"))
-    api(":hec-batch")
 }
 
 

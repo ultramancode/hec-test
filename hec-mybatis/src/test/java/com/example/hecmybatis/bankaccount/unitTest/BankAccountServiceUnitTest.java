@@ -18,6 +18,8 @@ import com.example.hecmybatis.bankaccount.mapper.BankAccountMapper;
 import com.example.hecmybatis.bankaccount.service.BankAccountService;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.hecmybatis.user.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,8 @@ public class BankAccountServiceUnitTest {
     private BankAccountMapper bankAccountMapper;
 
 
+    @Mock
+    private UserMapper userMapper;
     @InjectMocks
     private BankAccountService bankAccountService;
 
@@ -46,6 +50,7 @@ public class BankAccountServiceUnitTest {
         BankAccountRequestDto bankAccountRequestDto = new BankAccountRequestDto(1L, Bank.KB, 1000);
 
         when(bankAccountMapper.isBankAccountNumberExists(any(Long.class))).thenReturn(false);
+        when(userMapper.isUserExists(any(Long.class))).thenReturn(true);
 
         // when
         Long accountId = bankAccountService.createBankAccount(bankAccountRequestDto);
@@ -62,14 +67,14 @@ public class BankAccountServiceUnitTest {
         BankAccountAmountRequestDto bankAccountAmountRequestDto = new BankAccountAmountRequestDto(
                 100);
 
-        when(bankAccountMapper.getBankAccountByIdWithLock(any(Long.class))).thenReturn(
+        when(bankAccountMapper.getBankAccountByIdAndDeletedIsFalseWithLock(any(Long.class))).thenReturn(
                 new BankAccountVO());
 
         // when
         bankAccountService.depositBankAccount(1L, bankAccountAmountRequestDto);
 
         // then
-        verify(bankAccountMapper, times(1)).getBankAccountByIdWithLock(any(Long.class));
+        verify(bankAccountMapper, times(1)).getBankAccountByIdAndDeletedIsFalseWithLock(any(Long.class));
         verify(bankAccountMapper, times(1)).updateBalance(any(BankAccountVO.class));
     }
 
@@ -80,14 +85,14 @@ public class BankAccountServiceUnitTest {
         BankAccountAmountRequestDto bankAccountAmountRequestDto = new BankAccountAmountRequestDto(
                 100);
 
-        when(bankAccountMapper.getBankAccountByIdWithLock(any(Long.class))).thenReturn(
+        when(bankAccountMapper.getBankAccountByIdAndDeletedIsFalseWithLock(any(Long.class))).thenReturn(
                 new BankAccountVO());
 
         // when
         bankAccountService.withdrawBankAccount(1L, bankAccountAmountRequestDto);
 
         // then
-        verify(bankAccountMapper, times(1)).getBankAccountByIdWithLock(any(Long.class));
+        verify(bankAccountMapper, times(1)).getBankAccountByIdAndDeletedIsFalseWithLock(any(Long.class));
         verify(bankAccountMapper, times(1)).updateBalance(any(BankAccountVO.class));
     }
 
@@ -97,14 +102,14 @@ public class BankAccountServiceUnitTest {
         // given
         BankAccountVO bankAccountVO = new BankAccountVO(1L, Bank.KB, 123456789L, 1000);
 
-        when(bankAccountMapper.getBankAccountById(any(Long.class))).thenReturn(bankAccountVO);
+        when(bankAccountMapper.getBankAccountByIdAndDeletedIsFalse(any(Long.class))).thenReturn(bankAccountVO);
 
         // when
         bankAccountService.softDeleteBankAccount(1L);
 
         // then
         assertTrue(bankAccountVO.isDeleted());
-        verify(bankAccountMapper, times(1)).getBankAccountById(any(Long.class));
+        verify(bankAccountMapper, times(1)).getBankAccountByIdAndDeletedIsFalse(any(Long.class));
         verify(bankAccountMapper, times(1)).softDeleteBankAccount(any(BankAccountVO.class));
     }
 
@@ -115,15 +120,15 @@ public class BankAccountServiceUnitTest {
         List<BankAccountWithUserNameVO> bankAccountWithUserNameVOList = new ArrayList<>();
         bankAccountWithUserNameVOList.add(new BankAccountWithUserNameVO());
 
-        when(bankAccountMapper.getBankAccountsByUserId(any(Long.class))).thenReturn(
+        when(bankAccountMapper.getBankAccountsByUserIdWithDeletedIsFalse(any(Long.class))).thenReturn(
                 bankAccountWithUserNameVOList);
 
         // when
-        List<BankAccountResponseDto> result = bankAccountService.getBankAccountsByUserId(1L);
+        List<BankAccountResponseDto> result = bankAccountService.getBankAccountsByUserIdWithDeletedIsFalse(1L);
 
         // then
         assertEquals(1, result.size());
-        verify(bankAccountMapper, times(1)).getBankAccountsByUserId(any(Long.class));
+        verify(bankAccountMapper, times(1)).getBankAccountsByUserIdWithDeletedIsFalse(any(Long.class));
     }
 
     @Test

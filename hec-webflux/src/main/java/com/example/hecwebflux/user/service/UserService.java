@@ -10,7 +10,6 @@ import com.example.hecwebflux.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -49,12 +48,12 @@ public class UserService {
 
     public Mono<UserResponseDto> getUser(Long userId) {
         return getUserById(userId)
-                .map(user -> new UserResponseDto(user.getName()));
+                .map(user -> new UserResponseDto(user.getUserId(), user.getName()));
     }
 
     public Flux<UserResponseDto> getAllUsers() {
         return userRepository.findUsersByIsDeletedIsFalse()
-                .map(user -> new UserResponseDto(user.getName()));
+                .map(user -> new UserResponseDto(user.getUserId(), user.getName()));
     }
 
     public Mono<User> getUserById(Long userId) {

@@ -14,12 +14,16 @@ public interface BankAccountMapper {
     void updateBalance(BankAccountVO bankAccountVO);
 
     void softDeleteBankAccount(BankAccountVO bankAccountVO);
+    void hardDeleteBankAccount(BankAccountVO bankAccountVO);
     void softDeleteBankAccounts(List<Long> accountIds);
+    void hardDeleteBankAccounts(List<Long> accountIds);
 
+    BankAccountVO getBankAccountByIdAndDeletedIsFalse(Long accountId);
     BankAccountVO getBankAccountById(Long accountId);
 
-    BankAccountVO getBankAccountByIdWithLock(Long userId);
+    BankAccountVO getBankAccountByIdAndDeletedIsFalseWithLock(Long accountId);
 
+    List<BankAccountWithUserNameVO> getBankAccountsByUserIdWithDeletedIsFalse(Long userId);
     List<BankAccountWithUserNameVO> getBankAccountsByUserId(Long userId);
 
     List<BankAccountWithUserNameVO> getBankAccountsWithUserNameAndOptions(BankAccountConditionDto bankAccountConditionDto);

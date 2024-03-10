@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,10 @@ public class BankAccountService {
 
     @Transactional
     public Long createBankAccount(BankAccountRequestDto bankAccountRequestDto) {
+        if(!userMapper.isUserExists(bankAccountRequestDto.userId())){
+            throw new HecCustomException(ErrorCode.USER_IS_NOT_EXIST);
+        }
+
         Long bankAccountNumber = generateBankAccountNumber();
         if (!isBankAccountNumberExists(bankAccountNumber)) {
             BankAccountVO bankAccountVO =
@@ -67,7 +72,7 @@ public class BankAccountService {
     @Transactional
     public void depositBankAccountByNonLock(Long accountId,
             BankAccountAmountRequestDto bankAccountAmountRequestDto) {
-        BankAccountVO bankAccountVO = getBankAccountById(accountId);
+        BankAccountVO bankAccountVO = getBankAccountByIdAndDeletedIsFalse(accountId);
         bankAccountVO.deposit(bankAccountAmountRequestDto.amount());
         bankAccountMapper.updateBalance(bankAccountVO);
     }
@@ -76,30 +81,39 @@ public class BankAccountService {
     @Transactional
     public void withdrawBankAccountByNonLock(Long accountId,
             BankAccountAmountRequestDto bankAccountAmountRequestDto) {
-        BankAccountVO bankAccountVO = getBankAccountById(accountId);
+        BankAccountVO bankAccountVO = getBankAccountByIdAndDeletedIsFalse(accountId);
         bankAccountVO.withdraw(bankAccountAmountRequestDto.amount());
         bankAccountMapper.updateBalance(bankAccountVO);
     }
 
     @Transactional
     public void softDeleteBankAccount(Long accountId) {
-        BankAccountVO bankAccountVO = getBankAccountById(accountId);
+        BankAccountVO bankAccountVO = getBankAccountByIdAndDeletedIsFalse(accountId);
         if (bankAccountVO.isDeleted()) {
             throw new HecCustomException(ErrorCode.ACCOUNT_IS_ALREADY_DELETED);
         }
         bankAccountVO.softDelete();
         bankAccountMapper.softDeleteBankAccount(bankAccountVO);
     }
+    @Transactional
+    public void hardDeleteBankAccount(Long accountId) {
+        BankAccountVO bankAccountVO = getBankAccountById(accountId);
+        bankAccountVO.softDelete();
+        bankAccountMapper.hardDeleteBankAccount(bankAccountVO);
+    }
 
     @Transactional
     public void softDeleteBankAccounts(List<Long> accountIds) {
         bankAccountMapper.softDeleteBankAccounts(accountIds);
     }
-
+    @Transactional
+    public void hardDeleteBankAccounts(List<Long> accountIds) {
+        bankAccountMapper.hardDeleteBankAccounts(accountIds);
+    }
     @Transactional(readOnly = true)
     public BankAccountResponseDto getBankAccount(Long accountId) {
-        BankAccountVO bankAccountVO = bankAccountMapper.getBankAccountById(accountId);
-        UserVO userVO = userMapper.getUserById(bankAccountVO.getUserId());
+        BankAccountVO bankAccountVO = getBankAccountByIdAndDeletedIsFalse(accountId);
+        UserVO userVO = userMapper.getUserByIdAndDeletedIsFalse(bankAccountVO.getUserId());
         return new BankAccountResponseDto(
                 accountId,
                 userVO.getName(),
@@ -107,7 +121,18 @@ public class BankAccountService {
                 bankAccountVO.getAccountNumber(),
                 bankAccountVO.getBalance());
     }
-
+    @Transactional(readOnly = true)
+    public List<BankAccountResponseDto> getBankAccountsByUserIdWithDeletedIsFalse(Long userId) {
+        List<BankAccountWithUserNameVO> bankAccountsByUserId = bankAccountMapper.getBankAccountsByUserIdWithDeletedIsFalse(
+                userId);
+        return bankAccountsByUserId.stream()
+                .map(bankAccountWithUserNameVO -> new BankAccountResponseDto(
+                        bankAccountWithUserNameVO.getAccountId(),
+                        bankAccountWithUserNameVO.getName(),
+                        bankAccountWithUserNameVO.getBank(),
+                        bankAccountWithUserNameVO.getAccountNumber(),
+                        bankAccountWithUserNameVO.getBalance())).collect(Collectors.toList());
+    }
     @Transactional(readOnly = true)
     public List<BankAccountResponseDto> getBankAccountsByUserId(Long userId) {
         List<BankAccountWithUserNameVO> bankAccountsByUserId = bankAccountMapper.getBankAccountsByUserId(
@@ -120,8 +145,6 @@ public class BankAccountService {
                         bankAccountWithUserNameVO.getAccountNumber(),
                         bankAccountWithUserNameVO.getBalance())).collect(Collectors.toList());
     }
-
-
     @Transactional(readOnly = true)
     public List<BankAccountResponseDto> getBankAccountsWithUserNameAndOptions(
             BankAccountConditionDto bankAccountConditionDto) {
@@ -135,26 +158,28 @@ public class BankAccountService {
                         bankAccountWithUserNameVO.getAccountNumber(),
                         bankAccountWithUserNameVO.getBalance())).collect(Collectors.toList());
     }
-
     public boolean isBankAccountNumberExists(Long bankAccountNumber) {
         return bankAccountMapper.isBankAccountNumberExists(bankAccountNumber);
     }
-
+    public BankAccountVO getBankAccountByIdAndDeletedIsFalse(Long accountId) {
+        Optional<BankAccountVO> optionalBankAccountVO = Optional.ofNullable(
+                bankAccountMapper.getBankAccountByIdAndDeletedIsFalse(accountId));
+        return optionalBankAccountVO.orElseThrow(
+                () -> new HecCustomException(ErrorCode.ACCOUNT_IS_NOT_EXIST));
+    }
     public BankAccountVO getBankAccountById(Long accountId) {
         Optional<BankAccountVO> optionalBankAccountVO = Optional.ofNullable(
                 bankAccountMapper.getBankAccountById(accountId));
         return optionalBankAccountVO.orElseThrow(
                 () -> new HecCustomException(ErrorCode.ACCOUNT_IS_NOT_EXIST));
     }
-
     // 동시성 이슈 대비 DB Lock 걸은 조회 메소드
     public BankAccountVO getBankAccountByIdWithLock(Long accountId) {
         Optional<BankAccountVO> optionalBankAccountVO = Optional.ofNullable(
-                bankAccountMapper.getBankAccountByIdWithLock(accountId));
+                bankAccountMapper.getBankAccountByIdAndDeletedIsFalseWithLock(accountId));
         return optionalBankAccountVO.orElseThrow(
                 () -> new HecCustomException(ErrorCode.ACCOUNT_IS_NOT_EXIST));
     }
-
     // 계좌를 생성할 때 계좌 번호를 생성하는 메서드
     public Long generateBankAccountNumber() {
         Random random = new Random();
@@ -166,6 +191,4 @@ public class BankAccountService {
         // 문자열을 Long으로 변환하여 반환
         return Long.parseLong(bankAccountNumberBuilder.toString());
     }
-
-
 }

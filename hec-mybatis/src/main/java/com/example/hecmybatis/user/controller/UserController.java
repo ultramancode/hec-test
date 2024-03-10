@@ -19,6 +19,7 @@ public class UserController {
 
     private final UserService userService;
 
+    // 유저 생성
     @PostMapping
     public ResponseEntity<String> createUser(
             @RequestBody UserRequestDto userRequestDto) {
@@ -26,6 +27,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body("유저 생성");
     }
 
+    // 유저 이름 변경
     @PutMapping("/{userId}")
     public ResponseEntity<String> updateUser(
             @PathVariable Long userId,
@@ -35,17 +37,27 @@ public class UserController {
         return ResponseEntity.ok().body("유저 업데이트");
     }
 
+    // 유저 소프트 딜리트
     @PutMapping("/{userId}/soft-delete")
     public ResponseEntity<String> softDeleteUser(@PathVariable Long userId) {
         userService.softDeleteUser(userId);
         return ResponseEntity.ok().body("유저 소프트 딜리트");
     }
 
+    // 유저 하드 딜리트
+    @DeleteMapping("/{userId}/hard-delete")
+    public ResponseEntity<String> hardDeleteUser(@PathVariable Long userId) {
+        userService.hardDeleteUser(userId);
+        return ResponseEntity.ok().body("유저 하드 딜리트");
+    }
+
+    // 유저 단건 조회
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable Long userId) {
         return ResponseEntity.ok().body(userService.getUser(userId));
     }
 
+    // 유저 조건 조회(검색, 정렬, 페이징)
     @GetMapping("/search")
     public ResponseEntity<List<UserResponseDto>> getUsersWithOptions
             (@ModelAttribute UserConditionDto userConditionDto) {
