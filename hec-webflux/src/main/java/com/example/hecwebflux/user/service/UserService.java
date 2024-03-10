@@ -41,7 +41,7 @@ public class UserService {
                     if (user.isDeleted()) {
                         return Mono.error(new HecCustomException(ErrorCode.USER_IS_ALREADY_DELETED));
                     }
-                    user.setDeleted(true);
+                    user.softDelete();
                     return userRepository.save(user);
                 })
                 .then();

@@ -12,7 +12,6 @@ import javax.annotation.processing.Generated;
 import java.time.LocalDateTime;
 @Table("users")
 @NoArgsConstructor
-@Setter
 @Getter
 public class User {
     @Id
