@@ -58,6 +58,7 @@ public class UserService {
                 .map(user -> new UserResponseDto(user.getUserId(), user.getName()));
     }
 
+    // DatabaseClient 방식의 조회 테스트
     public Flux<UserResponseDto> getAllUsersByNativeQuery() {
         return databaseClient.sql("SELECT * FROM users WHERE is_deleted = FALSE")
                 .map(row -> new UserResponseDto((Long) row.get("user_id"), (String) row.get("name")))
@@ -68,6 +69,4 @@ public class UserService {
         return userRepository.findByUserIdAndIsDeletedIsFalse(userId)
                 .switchIfEmpty(Mono.error(new HecCustomException(ErrorCode.USER_IS_NOT_EXIST)));
     }
-
-
 }
