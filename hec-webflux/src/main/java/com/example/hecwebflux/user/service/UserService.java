@@ -5,7 +5,7 @@ import com.example.heccore.common.exception.HecCustomException;
 import com.example.hecwebflux.user.dto.request.UserNameUpdateRequestDto;
 import com.example.hecwebflux.user.dto.request.UserRequestDto;
 import com.example.hecwebflux.user.dto.response.UserResponseDto;
-import com.example.hecwebflux.user.entity.User;
+import com.example.heccore.user.model.User;
 import com.example.hecwebflux.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

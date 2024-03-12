@@ -50,7 +50,7 @@
   </select>
 
   <!-- 다양한 옵션을 고려한 사용자 조회 -->
-  <select id="getUsersWithOptions" resultMap="UserResultMap" parameterType="com.example.hecmybatis.user.dto.request.UserConditionDto">
+  <select id="getUsersWithOptions" resultMap="UserResultMap" parameterType="com.example.heccore.user.dto.request.UserConditionDto">
     SELECT * FROM users
     <where>
       <if test="name != null and name != ''">

@@ -1,4 +1,4 @@
-package com.example.hecmybatis.bankaccount.dto.response;
+package com.example.heccore.bank.dto.response;
 
 
 import com.example.heccore.common.enums.Bank;

@@ -6,13 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.example.heccore.common.enums.Bank;
 import com.example.heccore.common.exception.HecCustomException;
-import com.example.hecmybatis.bankaccount.dto.request.BankAccountRequestDto;
+import com.example.heccore.bank.dto.request.BankAccountRequestDto;
 import com.example.hecmybatis.bankaccount.mapper.BankAccountMapper;
 import com.example.hecmybatis.bankaccount.service.BankAccountService;
-import com.example.hecmybatis.user.dto.request.UserConditionDto;
-import com.example.hecmybatis.user.dto.request.UserNameUpdateRequestDto;
-import com.example.hecmybatis.user.dto.request.UserRequestDto;
-import com.example.hecmybatis.user.dto.response.UserResponseDto;
+import com.example.heccore.user.dto.request.UserConditionDto;
+import com.example.heccore.user.dto.request.UserNameUpdateRequestDto;
+import com.example.heccore.user.dto.request.UserRequestDto;
+import com.example.heccore.user.dto.response.UserResponseDto;
 import com.example.hecmybatis.user.mapper.UserMapper;
 import com.example.hecmybatis.user.service.UserService;
 import java.util.List;

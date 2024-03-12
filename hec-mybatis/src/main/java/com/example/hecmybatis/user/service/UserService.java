@@ -3,12 +3,12 @@ package com.example.hecmybatis.user.service;
 import com.example.heccore.common.exception.ErrorCode;
 import com.example.heccore.common.exception.HecCustomException;
 import com.example.heccore.user.model.UserVO;
-import com.example.hecmybatis.bankaccount.dto.response.BankAccountResponseDto;
+import com.example.heccore.bank.dto.response.BankAccountResponseDto;
 import com.example.hecmybatis.bankaccount.service.BankAccountService;
-import com.example.hecmybatis.user.dto.request.UserConditionDto;
-import com.example.hecmybatis.user.dto.request.UserNameUpdateRequestDto;
-import com.example.hecmybatis.user.dto.request.UserRequestDto;
-import com.example.hecmybatis.user.dto.response.UserResponseDto;
+import com.example.heccore.user.dto.request.UserConditionDto;
+import com.example.heccore.user.dto.request.UserNameUpdateRequestDto;
+import com.example.heccore.user.dto.request.UserRequestDto;
+import com.example.heccore.user.dto.response.UserResponseDto;
 import com.example.hecmybatis.user.mapper.UserMapper;
 
 import java.util.List;

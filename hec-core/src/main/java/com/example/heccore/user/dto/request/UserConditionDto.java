@@ -1,14 +1,12 @@
-package com.example.hecmybatis.bankaccount.dto.request;
+package com.example.heccore.user.dto.request;
 
-import com.example.heccore.common.enums.Bank;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
-public class BankAccountConditionDto {
-    private Long accountNumber;
-    private Bank bank;
+@Getter
+public class UserConditionDto {
     private String name;
     private String orderBy;
     private String orderDirection;
@@ -16,14 +14,14 @@ public class BankAccountConditionDto {
     private int size;
     private int offset;
 
-    public BankAccountConditionDto(int page, int size) {
+    public UserConditionDto(int page, int size) {
         this.page = page;
         this.size = size;
         this.offset = (page - 1) * size;
     }
 
     // 기본값으로 페이지를 1, 사이즈를 3으로 설정하는 생성자
-    public BankAccountConditionDto() {
+    public UserConditionDto() {
         this(1, 3);
     }
 

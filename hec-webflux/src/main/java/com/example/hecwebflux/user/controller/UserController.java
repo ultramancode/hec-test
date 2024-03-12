@@ -1,9 +1,10 @@
 package com.example.hecwebflux.user.controller;
 
+import com.example.heccore.user.model.User;
 import com.example.hecwebflux.user.dto.request.UserNameUpdateRequestDto;
 import com.example.hecwebflux.user.dto.request.UserRequestDto;
 import com.example.hecwebflux.user.dto.response.UserResponseDto;
-import com.example.hecwebflux.user.entity.User;
+import com.example.hecwebflux.user.repository.UserRepository;
 import com.example.hecwebflux.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,13 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/webflux-api/v1/users")
 public class UserController {
 private final UserService userService;
+private final UserRepository userRepository;
 
 
 
@@ -47,6 +47,11 @@ private final UserService userService;
     public Mono<ResponseEntity<UserResponseDto>> getUser(@PathVariable Long userId) {
         return userService.getUser(userId)
                 .map(userResponseDto -> ResponseEntity.ok().body(userResponseDto));
+    }
+    @GetMapping("/tt/{userId}")
+    public Mono<ResponseEntity<User>> getUser22(@PathVariable Long userId) {
+        return userRepository.findById(userId)
+                .map(user -> ResponseEntity.ok().body(user));
     }
 
     @GetMapping

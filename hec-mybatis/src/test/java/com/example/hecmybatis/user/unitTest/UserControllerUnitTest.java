@@ -12,10 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.hecmybatis.user.controller.UserController;
-import com.example.hecmybatis.user.dto.request.UserConditionDto;
-import com.example.hecmybatis.user.dto.request.UserNameUpdateRequestDto;
-import com.example.hecmybatis.user.dto.request.UserRequestDto;
-import com.example.hecmybatis.user.dto.response.UserResponseDto;
+import com.example.heccore.user.dto.request.UserConditionDto;
+import com.example.heccore.user.dto.request.UserNameUpdateRequestDto;
+import com.example.heccore.user.dto.request.UserRequestDto;
+import com.example.heccore.user.dto.response.UserResponseDto;
 import com.example.hecmybatis.user.service.UserService;
 import java.util.ArrayList;
 import java.util.List;

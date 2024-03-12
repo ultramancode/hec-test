@@ -4,7 +4,7 @@ import com.example.heccore.user.model.UserVO;
 
 import java.util.List;
 
-import com.example.hecmybatis.user.dto.request.UserConditionDto;
+import com.example.heccore.user.dto.request.UserConditionDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

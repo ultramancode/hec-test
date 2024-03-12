@@ -103,7 +103,7 @@
 
 
   <!-- 사용자 이름을 포함한 계좌 정보를 가져오는 쿼리 (다양한 옵션 고려)-->
-  <select id="getBankAccountsWithUserNameAndOptions" resultMap="BankAccountWithUserNameResultMap" parameterType="com.example.hecmybatis.bankaccount.dto.request.BankAccountConditionDto">
+  <select id="getBankAccountsWithUserNameAndOptions" resultMap="BankAccountWithUserNameResultMap" parameterType="com.example.heccore.bank.dto.request.BankAccountConditionDto">
     SELECT ba.*, u.name as name
     FROM bank_accounts ba
     LEFT JOIN users u ON ba.user_id = u.user_id

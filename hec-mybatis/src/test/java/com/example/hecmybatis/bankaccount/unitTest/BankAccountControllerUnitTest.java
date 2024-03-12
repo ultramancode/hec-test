@@ -12,10 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.heccore.common.enums.Bank;
 import com.example.hecmybatis.bankaccount.controller.BankAccountController;
-import com.example.hecmybatis.bankaccount.dto.request.BankAccountAmountRequestDto;
-import com.example.hecmybatis.bankaccount.dto.request.BankAccountConditionDto;
-import com.example.hecmybatis.bankaccount.dto.request.BankAccountRequestDto;
-import com.example.hecmybatis.bankaccount.dto.response.BankAccountResponseDto;
+import com.example.heccore.bank.dto.request.BankAccountAmountRequestDto;
+import com.example.heccore.bank.dto.request.BankAccountConditionDto;
+import com.example.heccore.bank.dto.request.BankAccountRequestDto;
+import com.example.heccore.bank.dto.response.BankAccountResponseDto;
 import com.example.hecmybatis.bankaccount.service.BankAccountService;
 import java.util.Arrays;
 import java.util.List;

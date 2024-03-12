@@ -1,9 +1,9 @@
 package com.example.hecmybatis.user.controller;
 
-import com.example.hecmybatis.user.dto.request.UserConditionDto;
-import com.example.hecmybatis.user.dto.request.UserNameUpdateRequestDto;
-import com.example.hecmybatis.user.dto.request.UserRequestDto;
-import com.example.hecmybatis.user.dto.response.UserResponseDto;
+import com.example.heccore.user.dto.request.UserConditionDto;
+import com.example.heccore.user.dto.request.UserNameUpdateRequestDto;
+import com.example.heccore.user.dto.request.UserRequestDto;
+import com.example.heccore.user.dto.response.UserResponseDto;
 import com.example.hecmybatis.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
