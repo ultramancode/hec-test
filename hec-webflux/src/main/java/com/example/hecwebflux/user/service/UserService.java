@@ -9,6 +9,7 @@ import com.example.heccore.user.model.User;
 import com.example.hecwebflux.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,6 +20,7 @@ import reactor.core.publisher.Mono;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final DatabaseClient databaseClient;
 
     public Mono<User> createUser(UserRequestDto userRequestDto) {
         User user = new User(userRequestDto.name());
@@ -56,10 +58,15 @@ public class UserService {
                 .map(user -> new UserResponseDto(user.getUserId(), user.getName()));
     }
 
+    // DatabaseClient 방식의 조회 테스트
+    public Flux<UserResponseDto> getAllUsersByNativeQuery() {
+        return databaseClient.sql("SELECT * FROM users WHERE is_deleted = FALSE")
+                .map(row -> new UserResponseDto((Long) row.get("user_id"), (String) row.get("name")))
+                .all();
+    }
+
     public Mono<User> getUserById(Long userId) {
         return userRepository.findByUserIdAndIsDeletedIsFalse(userId)
                 .switchIfEmpty(Mono.error(new HecCustomException(ErrorCode.USER_IS_NOT_EXIST)));
     }
-
-
 }
